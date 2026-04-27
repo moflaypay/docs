@@ -20,8 +20,7 @@ API keys authenticate your requests to the Moflay API. Create separate keys for 
     Select **Sandbox** for testing or **Production** for real payments.
   </Step>
   <Step title="Create the key">
-    Give the key a clear name such as `checkout-service-sandbox`, then assign
-    only the permissions your service needs.
+    Give the key a clear name such as `checkout-service-sandbox`, then assign only the permissions your service needs.
   </Step>
   <Step title="Copy the key once">
     Copy the key immediately and store it securely. Treat it like a password.
@@ -71,7 +70,7 @@ Your API key is working if you can call an endpoint successfully in the same env
 
 - **`missing_api_key`**: Add the `Authorization: Bearer YOUR_API_KEY` header.
 - **`invalid_api_key`**: Check that the key is valid and copied correctly.
-- **`invalid_access`**: The key exists, but it does not have the permission required by that endpoint.
+- `invalid_access`: The key exists, but it does not have the permission required by that endpoint
 
 ## Related tasks
 

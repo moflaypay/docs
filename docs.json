@@ -127,6 +127,7 @@
           {
             "group": "APIs",
             "icon": "square-terminal",
+            "expanded": true,
             "openapi": {
               "source": "https://api.moflay.com/openapi",
               "directory": "api-reference"
