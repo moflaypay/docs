@@ -1,0 +1,56 @@
+---
+title: "Transaction examples"
+description: "List and retrieve Moflay transactions with the Node.js SDK."
+---
+
+Use transaction APIs to inspect payment activity for your business and environment.
+
+## List transactions
+
+```typescript
+import { Moflay } from "@moflay/sdk";
+
+const moflay = new Moflay({
+  token: process.env.MOFLAY_API_KEY!,
+});
+
+const transactions = await moflay.transactions.list({ limit: 10 });
+
+for await (const page of transactions) {
+  console.log(page.data);
+}
+```
+
+## Get a transaction
+
+```typescript
+const transaction = await moflay.transactions.getOne({
+  id: "trxn_ABC123DEF456GHI",
+});
+
+console.log(transaction.status, transaction.amount);
+```
+
+## Filter by date range
+
+```typescript
+const transactions = await moflay.transactions.list({
+  start: new Date("2026-04-01T00:00:00.000Z"),
+  end: new Date("2026-04-30T23:59:59.999Z"),
+  limit: 10,
+});
+
+for await (const page of transactions) {
+  console.log(page.data);
+}
+```
+
+## Required permission
+
+Transaction reads require the `transactions.read` permission.
+
+## Related pages
+
+- [Pagination](/api-reference/pagination)
+- [Webhook events](/webhooks/events)
+- [Make your first payment](/first-payment)

@@ -1,0 +1,49 @@
+---
+title: "Environments"
+description: "Understand how sandbox and production environments work in Moflay so you can test safely and go live cleanly."
+---
+
+Moflay separates testing from live traffic with two environments: `sandbox` and `production`.
+
+## Sandbox
+
+Use sandbox while you are building and validating your integration.
+
+- Safe for testing
+- Separate API keys
+- Separate data from production
+- Shared or custom sandbox credentials depending on your setup
+
+Sandbox API keys start with `mof_test_`.
+
+## Production
+
+Use production only when you are ready to accept real payments.
+
+- Requires your own live Daraja credentials
+- Uses separate API keys and transaction data
+- Sends real payment requests through your configured till or paybill
+
+Production API keys start with `mof_live_`.
+
+## Why the separation matters
+
+Environment isolation helps you:
+
+- Avoid mixing test and live traffic
+- Keep credential mistakes from affecting real customers
+- Validate your webhook and transaction flows before launch
+
+## Recommended workflow
+
+1. Build in sandbox.
+2. Create and test your API integration.
+3. Configure production Daraja credentials.
+4. Generate production API keys.
+5. Switch your deployment to production only after verification.
+
+## Related pages
+
+- [Set up sandbox credentials](/daraja/setup-sandbox-credentials)
+- [Set up production credentials](/daraja/setup-production-credentials)
+- [Set up an API key](/setup-api-key)

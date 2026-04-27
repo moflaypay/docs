@@ -1,0 +1,81 @@
+---
+title: "Go-live checklist"
+description: "Prepare production credentials, API keys, webhooks, and live payment checks before accepting real M-Pesa payments."
+---
+
+Use this checklist before you send real M-Pesa payment requests through Moflay.
+
+## 1. Confirm your Safaricom setup
+
+Make sure you have:
+
+- A valid till or paybill from your Safaricom merchant setup
+- Live Daraja access for the M-Pesa online product
+- The production consumer key and consumer secret
+- The production passkey
+- The business shortcode and short code type
+
+## 2. Save production credentials
+
+1. Open [Credentials](https://app.moflay.com/credentials).
+2. Switch to the production environment.
+3. Enter the live Daraja values.
+4. Save the credentials.
+5. Confirm the credentials are active and valid before sending live payments.
+
+## 3. Create a production API key
+
+Create a `mof_live_` API key for the backend service that will create payments.
+
+Grant only the permissions the service needs:
+
+- `express.pay` to create M-Pesa Express payments
+- `transactions.read` to read payment and transaction status
+- `customers.read` or `customers.write` only if the service manages customers
+
+## 4. Configure webhooks
+
+Set up a production webhook endpoint before launch so your backend receives final payment events.
+
+1. Open [Webhooks](https://app.moflay.com/webhooks).
+2. Add your production endpoint URL.
+3. Subscribe to `payment.completed` and `payment.failed`.
+4. Store the webhook signing secret in your backend environment variables.
+5. Verify signatures before processing webhook payloads.
+
+## 5. Run a controlled live payment
+
+Send a small live payment from your production deployment.
+
+Check that:
+
+- The API request uses a `mof_live_` key.
+- The payment appears in the production dashboard.
+- Your webhook endpoint receives the final event.
+- Your internal order or invoice state updates once.
+- The amount settles to the configured till or paybill.
+
+## 6. Prepare operations
+
+Before public launch:
+
+- Store production API keys in a secret manager.
+- Use `Idempotency-Key` on payment creation retries.
+- Monitor failed payments and webhook delivery errors.
+- Keep support contact details ready for launch issues.
+- Know which key or credential to rotate if a secret is exposed.
+
+## Rollback path
+
+If live payments fail during launch:
+
+1. Stop sending production payment requests from your backend.
+2. Keep webhook processing active so in-flight payments can finish.
+3. Check production credentials, API key permissions, and webhook delivery.
+4. Contact [support@moflay.com](mailto:support@moflay.com) if the issue is not isolated.
+
+## Related pages
+
+- [Set up production credentials](/daraja/setup-production-credentials)
+- [Verify webhook signatures](/webhooks/signature-verification)
+- [Credential security](/dashboard/credentials-security)

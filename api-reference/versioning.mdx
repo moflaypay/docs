@@ -1,0 +1,51 @@
+---
+title: "Versioning"
+description: "Understand the current Moflay API version and how to call versioned REST endpoints."
+---
+
+Moflay uses URL-based API versioning. All public REST API endpoints include the version in the path.
+
+## Current version
+
+```text
+https://api.moflay.com/v1
+```
+
+The current public API version is `v1`.
+
+## Versioned endpoints
+
+Always include `/v1` in API requests:
+
+```bash
+curl "https://api.moflay.com/v1/customers" \
+  -H "Authorization: Bearer $MOFLAY_API_KEY"
+```
+
+Versioned paths make API behavior explicit and give Moflay room to introduce future major versions without changing the base domain.
+
+## Current v1 areas
+
+- `POST /v1/express`
+- `GET /v1/payments/{paymentId}`
+- `GET /v1/customers`
+- `GET /v1/transactions`
+
+The generated API reference lists the complete set of available endpoints and request schemas.
+
+## Compatibility expectations
+
+Within `v1`, Moflay aims to preserve existing integrations. Additive changes can still happen, such as:
+
+- New optional response fields
+- New endpoints
+- New event types
+- Documentation and validation improvements
+
+Build clients so they ignore response fields they do not use.
+
+## Related pages
+
+- [API introduction](/api-reference/introduction)
+- [Authentication](/api-reference/authentication)
+- [Errors](/api-reference/errors)

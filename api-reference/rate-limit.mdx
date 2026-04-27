@@ -1,0 +1,49 @@
+---
+title: "Rate Limits"
+description: "Understand Moflay API rate limits, response headers, and sandbox versus production quotas."
+---
+
+To ensure fair usage and protect the stability of the Moflay API, requests are subject to **rate limits**.
+
+Rate limits vary depending on the **environment** you are using `production` vs `sandbox`.
+
+## How Rate Limits Work
+
+- Each request you make to the API consumes from a **rate limit quota**.
+- If you exceed your allocated limit, the API will return a `429 Too Many Requests` error.
+- Rate limits are **scoped to your environment** (production or sandbox).
+  - Requests in **sandbox** do not affect your **production quota**, and vice versa.
+
+## Rate Limit Headers
+
+Every response from the API includes rate limit headers so you can programmatically track your remaining quota:
+
+| Header                  | Description                                                                  |
+| ----------------------- | ---------------------------------------------------------------------------- |
+| `X-RateLimit-Limit`     | The maximum number of requests that the consumer is permitted to make.       |
+| `X-RateLimit-Remaining` | The number of requests remaining in the current rate limit window.           |
+| `X-RateLimit-Reset`     | The time at which the current rate limit window resets in UTC epoch seconds. |
+
+When the rate limit is exceeded, the API returns `429 Too Many Requests`:
+
+```json
+{
+  "error": {
+    "status": 429,
+    "code": "rate_limit_exceeded",
+    "message": "You have exceeded your request limit. Please try again later."
+  }
+}
+```
+
+## Environment-Based Limits
+
+We apply different rate limits depending on your environment:
+
+| Environment    | Requests per minute | Burst capacity | Hourly limit |
+| -------------- | ------------------- | -------------- | ------------ |
+| **Production** | 100 requests/min    | -              | 200 requests |
+| **Sandbox**    | 20 requests/min     | 5 requests/10s | -            |
+
+- Use **sandbox keys** to build and test without worrying about exhausting your production quota.
+- Switch to **production keys** when you go live with your integration.

@@ -1,0 +1,58 @@
+---
+title: "Webhook overview"
+description: "Use signed Moflay webhooks to receive payment and customer events from your backend."
+---
+
+Moflay webhooks notify your backend when payment and customer events happen. Use webhooks in production instead of relying only on polling.
+
+## How webhooks fit into the payment flow
+
+<Steps>
+  <Step title="Your backend creates a payment">
+    Your app calls `POST /v1/express` with a sandbox or production API key.
+  </Step>
+  <Step title="Moflay processes the M-Pesa result">
+    Moflay receives the Safaricom callback, updates the payment and transaction,
+    and stores the final status.
+  </Step>
+  <Step title="Moflay sends your webhook">
+    Moflay sends a signed event such as `payment.completed` or
+    `payment.failed` to your configured endpoint.
+  </Step>
+  <Step title="Your backend verifies and handles the event">
+    Your app verifies the signature, checks idempotency, and updates your
+    internal order or customer state.
+  </Step>
+</Steps>
+
+## Configure a webhook endpoint
+
+1. Open [Webhooks](https://app.moflay.com/webhooks).
+2. Create an endpoint for your backend URL.
+3. Subscribe to the events your app needs.
+4. Store the signing secret in your backend environment variables.
+5. Verify every incoming webhook before processing the payload.
+
+## Recommended payment events
+
+For most payment integrations, subscribe to:
+
+- `payment.completed`
+- `payment.failed`
+
+Customer events are useful when your backend needs to mirror Moflay customer records.
+
+## Safaricom callbacks vs Moflay webhooks
+
+| Term | Who sends it | Who receives it |
+| --- | --- | --- |
+| Safaricom callback | Safaricom Daraja | Moflay |
+| Moflay webhook | Moflay | Your backend |
+
+Daraja callbacks finalize the M-Pesa result inside Moflay. Your backend consumes Moflay webhooks so it can react to clean, signed payment and customer events.
+
+## Related pages
+
+- [Verify webhook signatures](/webhooks/signature-verification)
+- [Webhook events](/webhooks/events)
+- [Retries and idempotency](/webhooks/retries-and-idempotency)

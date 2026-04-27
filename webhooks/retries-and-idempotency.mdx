@@ -1,0 +1,59 @@
+---
+title: "Webhook retries and idempotency"
+description: "Handle repeated Moflay webhook deliveries safely with idempotent event processing."
+---
+
+Your webhook handler should be idempotent because webhook delivery systems can send the same event more than once.
+
+## Why duplicate handling matters
+
+Duplicate delivery can happen when:
+
+- Your endpoint times out.
+- Your endpoint returns a non-2xx response.
+- Network errors interrupt delivery.
+- Your app receives the same payment state through polling and webhooks.
+
+## Recommended handler pattern
+
+1. Verify the webhook signature.
+2. Read the message identifier from `svix-id`.
+3. Check whether your app already processed that message or Moflay resource state.
+4. Apply the state change once.
+5. Store that the message or resource state was processed.
+6. Return a 2xx response.
+
+## Idempotent payment updates
+
+For payment events, use one of these stable identifiers as your idempotency key:
+
+- The `svix-id` message header
+- The Moflay `paymentId`
+- The Moflay `transactionId`
+- Your own order ID stored in payment metadata
+
+Choose the identifier that matches your internal data model. The important rule is that the same event cannot update the same order twice.
+
+## Payment creation idempotency
+
+Webhook idempotency is separate from payment creation idempotency. When your backend calls `POST /v1/express`, send an `Idempotency-Key` header for safe retries.
+
+```bash
+curl https://api.moflay.com/v1/express \
+  -X POST \
+  -H "Authorization: Bearer $MOFLAY_API_KEY" \
+  -H "Content-Type: application/json" \
+  -H "Idempotency-Key: order-1001" \
+  -d '{
+    "phoneNumber": "254712345678",
+    "amount": 100,
+    "description": "Order 1001",
+    "accountReference": "ORDER1001"
+  }'
+```
+
+## Related pages
+
+- [Verify webhook signatures](/webhooks/signature-verification)
+- [Make your first payment with HTTP](/first-payment-http)
+- [API errors](/api-reference/errors)

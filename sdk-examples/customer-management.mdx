@@ -1,0 +1,81 @@
+---
+title: "Customer examples"
+description: "Create, read, update, delete, and list Moflay customers with the Node.js SDK."
+---
+
+Use customer APIs when your backend needs to store reusable customer records for payments and reporting.
+
+## Create a customer
+
+```typescript
+import { Moflay } from "@moflay/sdk";
+
+const moflay = new Moflay({
+  token: process.env.MOFLAY_API_KEY!,
+});
+
+const customer = await moflay.customers.create({
+  phoneNumber: "254712345678",
+  name: "Jane Doe",
+  description: "VIP customer",
+  metadata: {
+    externalUserId: "user_123",
+  },
+});
+
+console.log(customer.id);
+```
+
+## Get a customer
+
+```typescript
+const customer = await moflay.customers.getOne({
+  id: "cus_GqfKXLmg61LURZhB",
+});
+
+console.log(customer);
+```
+
+## Update a customer
+
+```typescript
+const customer = await moflay.customers.update({
+  id: "cus_GqfKXLmg61LURZhB",
+  name: "Jane Wanjiku",
+  metadata: {
+    externalUserId: "user_123",
+    segment: "premium",
+  },
+});
+```
+
+## List customers
+
+```typescript
+const customers = await moflay.customers.list({ limit: 10 });
+
+for await (const page of customers) {
+  console.log(page.data);
+}
+```
+
+## Delete a customer
+
+```typescript
+await moflay.customers.delete({
+  id: "cus_GqfKXLmg61LURZhB",
+});
+```
+
+## Required permissions
+
+| Operation | Permission |
+| --- | --- |
+| List or get customers | `customers.read` |
+| Create, update, or delete customers | `customers.write` |
+
+## Related pages
+
+- [Manage API keys](/dashboard/api-keys/introduction)
+- [Pagination](/api-reference/pagination)
+- [Webhook events](/webhooks/events)

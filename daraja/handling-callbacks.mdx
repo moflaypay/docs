@@ -1,0 +1,43 @@
+---
+title: "Daraja callbacks"
+description: "Understand how Moflay handles Safaricom Daraja callbacks and where your backend should listen for payment events."
+---
+
+Daraja sends payment callbacks after Safaricom processes an M-Pesa request. When you use Moflay, Moflay receives that callback, updates the payment and transaction state, then sends signed Moflay webhooks to your backend.
+
+## What Moflay adds
+
+Moflay adds a production event layer around Daraja callbacks:
+
+- Receiving the Safaricom callback
+- Matching the callback to the payment attempt
+- Updating the payment and transaction status
+- Sending Moflay webhook events to your configured endpoint
+
+## What your backend should handle
+
+Your backend should consume Moflay webhooks instead of raw Daraja callbacks.
+
+Use webhooks to:
+
+- Mark orders as paid
+- Handle failed payments
+- Unlock access after payment
+- Keep internal transaction state in sync
+
+## Safaricom callbacks vs Moflay webhooks
+
+| Term | Sender | Receiver | Your responsibility |
+| --- | --- | --- | --- |
+| Safaricom callback | Safaricom Daraja | Moflay | Moflay receives and processes it |
+| Moflay webhook | Moflay | Your backend | Verify and process the event |
+
+## Build against Moflay webhooks
+
+Start with [Webhook overview](/webhooks/overview), then add [signature verification](/webhooks/signature-verification) and [idempotent event handling](/webhooks/retries-and-idempotency).
+
+## Related pages
+
+- [Webhook overview](/webhooks/overview)
+- [Webhook events](/webhooks/events)
+- [Set up production credentials](/daraja/setup-production-credentials)

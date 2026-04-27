@@ -1,0 +1,39 @@
+---
+title: "Webhook events"
+description: "Review the Moflay webhook event types your backend can subscribe to."
+---
+
+Webhook event types describe what changed in Moflay. Subscribe only to the events your backend needs.
+
+## Payment events
+
+| Event | When it is sent | Common action |
+| --- | --- | --- |
+| `payment.completed` | A payment finishes successfully | Mark an order, invoice, or wallet top-up as paid |
+| `payment.failed` | A payment fails or is rejected | Mark the payment attempt as failed and allow retry |
+
+## Customer events
+
+| Event | When it is sent | Common action |
+| --- | --- | --- |
+| `customer.created` | A customer record is created | Mirror the customer in your system |
+| `customer.updated` | A customer record changes | Update local customer details |
+| `customer.deleted` | A customer record is deleted | Archive or unlink the local customer |
+
+## Event payloads
+
+Payment event payloads contain the Moflay payment or transaction data needed to reconcile the event with your system. Customer event payloads contain the affected customer record.
+
+Use stable Moflay identifiers such as `paymentId`, `transactionId`, and `customerId` to connect webhook events to your internal records.
+
+## Choose events for your integration
+
+- Payment-only checkout: subscribe to `payment.completed` and `payment.failed`.
+- Customer sync: add `customer.created`, `customer.updated`, and `customer.deleted`.
+- Dashboard-only workflows: you may not need webhooks unless another system must react automatically.
+
+## Related pages
+
+- [Webhook overview](/webhooks/overview)
+- [Verify webhook signatures](/webhooks/signature-verification)
+- [Make your first payment with HTTP](/first-payment-http)

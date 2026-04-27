@@ -1,0 +1,90 @@
+---
+title: "Authentication"
+description: "Authenticate Moflay API requests with sandbox or production API keys, permissions, and Bearer tokens."
+---
+
+The Moflay API uses API keys to authenticate public API requests. Send the key as a Bearer token in the `Authorization` header.
+
+```http
+Authorization: Bearer mof_test_your_api_key
+```
+
+## API key prefixes
+
+| Prefix | Environment |
+| --- | --- |
+| `mof_test_` | Sandbox |
+| `mof_live_` | Production |
+
+The API key determines the business, environment, and permissions for the request. Do not pass business or environment IDs in public API requests.
+
+## Create and store keys
+
+Create keys in the [API Keys dashboard](https://app.moflay.com/api-keys). Copy the raw key when it is created and store it in your secret manager or deployment environment variables.
+
+```bash
+export MOFLAY_API_KEY="mof_test_your_api_key"
+```
+
+Treat API keys like passwords. Do not commit them to source code, expose them in frontend apps, or share them in support tickets.
+
+## Permissions
+
+Each key has a permission set. Current public API permissions include:
+
+| Permission | Allows |
+| --- | --- |
+| `express.pay` | Create M-Pesa Express payment requests |
+| `customers.read` | Read customer records |
+| `customers.write` | Create, update, or delete customer records |
+| `transactions.read` | Read transactions and payment status |
+
+## Authentication errors
+
+### Missing API key
+
+If you do not include the `Authorization` header, the API returns `401 Unauthorized`.
+
+```json
+{
+  "error": {
+    "status": 401,
+    "code": "missing_api_key",
+    "message": "Missing API key in the authorization header."
+  }
+}
+```
+
+### Invalid API key
+
+If the key is incorrect, malformed, or not found, the API returns `403 Forbidden`.
+
+```json
+{
+  "error": {
+    "status": 403,
+    "code": "invalid_api_key",
+    "message": "API key is invalid."
+  }
+}
+```
+
+### Insufficient permissions
+
+If the key does not have the permission required by an endpoint, the API returns `422 Unprocessable Entity`.
+
+```json
+{
+  "error": {
+    "status": 422,
+    "code": "invalid_access",
+    "message": "The API key does not have the necessary permissions to access this resource."
+  }
+}
+```
+
+## Related pages
+
+- [Set up an API key](/setup-api-key)
+- [Manage API keys](/dashboard/api-keys/introduction)
+- [API errors](/api-reference/errors)

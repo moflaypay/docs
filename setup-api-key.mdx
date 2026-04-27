@@ -1,0 +1,80 @@
+---
+title: "Set up an API key"
+description: "Create an API key for sandbox or production so your application can authenticate with Moflay."
+---
+
+API keys authenticate your requests to the Moflay API. Create separate keys for each environment and grant only the permissions your integration needs.
+
+## Prerequisites
+
+- A [Moflay account and organization](/setup-moflay)
+- Access to the [Moflay dashboard](https://app.moflay.com)
+
+## Create an API key
+
+<Steps>
+  <Step title="Open the API Keys page">
+    Go to [API Keys in the dashboard](https://app.moflay.com/api-keys).
+  </Step>
+  <Step title="Choose the environment">
+    Select **Sandbox** for testing or **Production** for real payments.
+  </Step>
+  <Step title="Create the key">
+    Give the key a clear name such as `checkout-service-sandbox`, then assign
+    only the permissions your service needs.
+  </Step>
+  <Step title="Copy the key once">
+    Copy the key immediately and store it securely. Treat it like a password.
+  </Step>
+</Steps>
+
+## Environment-specific prefixes
+
+- `mof_test_`: Sandbox API keys
+- `mof_live_`: Production API keys
+
+## Available permissions
+
+The current API permission set includes:
+
+- `express.pay`
+- `customers.read`
+- `customers.write`
+- `transactions.read`
+
+## Use the key in your app
+
+```bash
+export MOFLAY_API_KEY="mof_test_your_api_key"
+```
+
+```typescript
+import { Moflay } from "@moflay/sdk";
+
+const moflay = new Moflay({
+  token: process.env.MOFLAY_API_KEY!,
+});
+```
+
+## Use the key with raw HTTP
+
+```bash
+curl https://api.moflay.com/v1/transactions \
+  -H "Authorization: Bearer $MOFLAY_API_KEY"
+```
+
+## Verify the result
+
+Your API key is working if you can call an endpoint successfully in the same environment where the key was created.
+
+## Troubleshooting
+
+- **`missing_api_key`**: Add the `Authorization: Bearer YOUR_API_KEY` header.
+- **`invalid_api_key`**: Check that the key is valid and copied correctly.
+- **`invalid_access`**: The key exists, but it does not have the permission required by that endpoint.
+
+## Related tasks
+
+- [Create your first payment](/first-payment)
+- [Manage API keys in the dashboard](/dashboard/api-keys/introduction)
+- [Authentication reference](/api-reference/authentication)

@@ -1,0 +1,317 @@
+---
+title: "Moflay: The fastest way to add M-Pesa Payments"
+sidebarTitle: "Introduction"
+description: "Understand what Moflay is, how it works with Daraja, and how to start accepting M-Pesa payments with the API, SDK, dashboard, and webhooks."
+---
+
+<img
+  height="100"
+  src="/images/hero.png"
+  alt="Moflay dashboard for M-Pesa payments"
+/>
+
+## What is Moflay?
+
+Moflay is a developer infrastructure layer for M-Pesa payments.
+
+Daraja gives access to M-Pesa. Moflay gives developers the production layer around that access: a clean API, SDK, signed webhooks, transaction records, logs, dashboard visibility, and managed credentials for your own till or paybill.
+
+<CardGroup cols={2}>
+  <Card title="Built around Daraja" icon="plug">
+    Moflay uses Daraja as the M-Pesa access layer and adds the developer
+    workflow your app needs around it.
+  </Card>
+
+  <Card title="Made for production apps" icon="server">
+    Move beyond a working STK Push demo with webhooks, payment states,
+    reconciliation records, environments, and dashboard tools.
+  </Card>
+</CardGroup>
+
+## Problems Moflay solves
+
+<AccordionGroup>
+  <Accordion title="Daraja setup takes time" icon="key-round">
+    **The problem**: A direct M-Pesa integration usually needs Daraja
+    credentials, token handling, environment setup, callbacks, and payment
+    state management before your app can safely accept payments.
+
+    **Moflay's solution**: Save your credentials in Moflay, create an API key,
+    and call one payment API while Moflay handles the Daraja workflow around
+    the request.
+
+  </Accordion>
+
+  <Accordion title="Callbacks are hard to operate" icon="webhook">
+    **The problem**: Safaricom callbacks are part of the payment flow, but your
+    product still needs clean events, retries, signature verification, and
+    idempotent handling.
+
+    **Moflay's solution**: Moflay receives the Safaricom callback, updates the
+    payment state, and sends signed webhooks such as `payment.completed` and
+    `payment.failed` to your backend.
+
+  </Accordion>
+
+  <Accordion title="Payment state needs to be reliable" icon="list-checks">
+    **The problem**: Your app needs to know whether a payment is pending,
+    completed, failed, or still waiting for a final result.
+
+    **Moflay's solution**: Moflay stores payment and transaction records that
+    are easier to reconcile from the dashboard, API, or webhook events.
+
+  </Accordion>
+
+  <Accordion title="Debugging payments should be simpler" icon="search">
+    **The problem**: When a payment fails, developers need enough context to
+    understand what happened without digging through scattered logs.
+
+    **Moflay's solution**: Use the dashboard to inspect customers,
+    transactions, API keys, credentials, environments, and webhook behavior in
+    one place.
+
+  </Accordion>
+</AccordionGroup>
+
+## Core features
+
+### M-Pesa Express payments
+
+<CardGroup cols={3}>
+  <Card title="STK Push API" icon="smartphone" href="/api-reference/introduction">
+    Create M-Pesa Express payment requests from your backend.
+  </Card>
+
+<Card title="Node.js SDK" icon="code" href="/sdk">
+  Use `@moflay/sdk` for a faster TypeScript and Node.js integration.
+</Card>
+
+  <Card title="Raw HTTP" icon="braces" href="/first-payment-http">
+    Call the REST API directly from any language or backend framework.
+  </Card>
+</CardGroup>
+
+### Environments and credentials
+
+<CardGroup cols={3}>
+  <Card title="Sandbox" icon="flask-conical" href="/dashboard/environments">
+    Test payments safely before you move to production.
+  </Card>
+
+<Card
+  title="Production"
+  icon="badge-check"
+  href="/daraja/setup-production-credentials"
+>
+  Use live Daraja credentials when you are ready to process real payments.
+</Card>
+
+  <Card title="Managed credentials" icon="key" href="/dashboard/credentials">
+    Store Daraja credentials by business and environment.
+  </Card>
+</CardGroup>
+
+### Webhooks and records
+
+<CardGroup cols={3}>
+  <Card title="Signed webhooks" icon="webhook" href="/webhooks/overview">
+    Receive payment and customer events in your backend.
+  </Card>
+
+<Card
+  title="Transactions"
+  icon="receipt-text"
+  href="/sdk-examples/transaction-management"
+>
+  Read transaction records for reporting and reconciliation.
+</Card>
+
+  <Card title="Customers" icon="users" href="/sdk-examples/customer-management">
+    Create, list, update, and delete customer records.
+  </Card>
+</CardGroup>
+
+## How Moflay works
+
+<Steps>
+  <Step title="Your app creates a payment">
+    Your backend calls Moflay with the phone number, amount, description, and
+    optional customer details.
+  </Step>
+
+<Step title="Moflay talks to Daraja">
+  Moflay uses the Daraja credentials saved for the selected environment to send
+  the M-Pesa Express request.
+</Step>
+
+<Step title="The customer approves the prompt">
+  The customer confirms the payment from the M-Pesa prompt on their phone.
+</Step>
+
+<Step title="Moflay records the result">
+  Safaricom sends the callback to Moflay. Moflay updates the payment and
+  transaction state.
+</Step>
+
+  <Step title="Your backend receives an event">
+    Moflay sends a signed webhook to your backend so your app can update its
+    own order, invoice, wallet, or access state.
+  </Step>
+</Steps>
+
+## Integration options
+
+<Tabs>
+  <Tab title="SDK">
+    Use the Node.js SDK when you want the fastest path in a TypeScript or
+    JavaScript backend.
+
+    ```bash
+    npm install @moflay/sdk
+    ```
+
+    Start with [Make your first payment](/first-payment).
+
+  </Tab>
+
+  <Tab title="HTTP API">
+    Use the REST API when your backend is written in another language or you
+    already have your own HTTP client.
+
+    Start with [Make your first payment with HTTP](/first-payment-http).
+
+  </Tab>
+
+  <Tab title="Dashboard">
+    Use the dashboard to manage environments, API keys, Daraja credentials,
+    transactions, customers, and webhooks.
+
+    Start with [Set up your Moflay account](/setup-moflay).
+
+  </Tab>
+</Tabs>
+
+## Quick start
+
+<Steps>
+  <Step title="Create your account">
+    Create a Moflay account and organization from the
+    [Moflay dashboard](https://app.moflay.com).
+  </Step>
+
+  <Step title="Create an API key">
+    Generate a sandbox API key with the permissions your backend needs.
+
+    Learn more in [Create an API key](/setup-api-key).
+
+  </Step>
+
+  <Step title="Send a sandbox payment">
+    Use the SDK or raw HTTP API to send your first M-Pesa Express payment.
+
+    Start with [Make your first payment](/first-payment).
+
+  </Step>
+
+  <Step title="Set up webhooks">
+    Configure a webhook endpoint so your backend can receive signed payment
+    events.
+
+    Read the [Webhook overview](/webhooks/overview).
+
+  </Step>
+
+  <Step title="Prepare for production">
+    Add and verify your live Daraja credentials, then complete the go-live
+    checklist.
+
+    Use the [Go-live checklist](/go-live/checklist).
+
+  </Step>
+</Steps>
+
+## Why choose Moflay?
+
+<Tabs>
+  <Tab title="Developers">
+    <CardGroup cols={2}>
+      <Card title="Cleaner integration" icon="code">
+        Use one API or SDK instead of building every Daraja workflow directly
+        inside your app.
+      </Card>
+
+      <Card title="Less payment plumbing" icon="wrench">
+        Let Moflay handle credentials, callbacks, webhook delivery, and
+        transaction records around the payment flow.
+      </Card>
+    </CardGroup>
+
+  </Tab>
+
+  <Tab title="Startups">
+    <CardGroup cols={2}>
+      <Card title="Faster launch" icon="rocket">
+        Start in sandbox and move toward production without spending weeks on
+        M-Pesa integration infrastructure.
+      </Card>
+
+      <Card title="Direct settlement" icon="landmark">
+        Successful payments go to your configured M-Pesa till or paybill.
+        Moflay does not hold customer funds.
+      </Card>
+    </CardGroup>
+
+  </Tab>
+
+  <Tab title="Teams">
+    <CardGroup cols={2}>
+      <Card title="Operational visibility" icon="layout-dashboard">
+        Give your team a dashboard for transactions, customers, API keys,
+        credentials, and webhooks.
+      </Card>
+
+      <Card title="Reliable events" icon="bell-ring">
+        Use signed webhook events to keep your backend synchronized with
+        payment outcomes.
+      </Card>
+    </CardGroup>
+
+  </Tab>
+</Tabs>
+
+## Pricing model
+
+<CardGroup cols={2}>
+  <Card title="Pay per successful transaction" icon="receipt">
+    Moflay charges when payments succeed, so costs follow usage.
+  </Card>
+
+  <Card title="No setup or monthly platform fee" icon="circle-dollar-sign">
+    Start building without a fixed monthly software fee.
+  </Card>
+</CardGroup>
+
+<Info>
+  Contact Moflay if you need custom pricing for high-volume or enterprise use
+  cases.
+</Info>
+
+## Ready to start?
+
+<CardGroup cols={2}>
+  <Card title="Create account" icon="user-plus" href="https://app.moflay.com">
+    Create your Moflay account and organization.
+  </Card>
+
+<Card title="Make your first payment" icon="send" href="/first-payment">
+  Send a sandbox M-Pesa Express payment with the SDK.
+</Card>
+
+<Card title="Read how Moflay works" icon="book-open" href="/how-moflay-works">
+  Understand how Moflay fits between your app, Daraja, and M-Pesa.
+</Card>
+
+  <Card title="Explore the API" icon="square-terminal" href="/api-reference/introduction">
+    Review authentication, endpoints, errors, rate limits, and pagination.
+  </Card>
+</CardGroup>

@@ -1,0 +1,69 @@
+---
+title: "How Moflay works"
+description: "Understand how Moflay adds a production API, webhook, reconciliation, and logging layer around Daraja-powered M-Pesa payments."
+---
+
+Daraja provides access to M-Pesa. Moflay provides the developer infrastructure around that access so your app can use one production-ready API for STK Push, webhooks, reconciliation, and logs.
+
+## The payment flow
+
+<Steps>
+  <Step title="Your app creates a payment">
+    Your backend calls Moflay with the amount, phone number, description, and
+    optional customer details.
+  </Step>
+  <Step title="Moflay talks to Safaricom">
+    Moflay uses the Daraja credentials saved for the current environment to send
+    the STK push request.
+  </Step>
+  <Step title="The customer approves the prompt">
+    The payer confirms the payment on their phone.
+  </Step>
+  <Step title="Moflay processes the result">
+    Safaricom sends its callback to Moflay. Moflay records the outcome and
+    updates the transaction state.
+  </Step>
+  <Step title="Your systems receive the final status">
+    You can read the transaction in the dashboard or API, and you can subscribe
+    to signed Moflay webhooks such as `payment.completed` and `payment.failed`.
+  </Step>
+</Steps>
+
+## What Moflay adds around Daraja
+
+- API and SDK endpoints for creating M-Pesa Express payments
+- Daraja authentication using your saved credentials
+- Payment request validation before Safaricom receives the request
+- Safaricom callback processing and status updates
+- Reconciliation-friendly payment and transaction records
+- Signed webhook events for your backend
+
+## What you still need
+
+- A Moflay account and organization
+- An API key for the environment you are using
+- A valid till or paybill before you move to production
+- Production Daraja credentials if you want to accept real money
+
+## Where the money goes
+
+Moflay is the developer infrastructure layer, not the settlement destination. Successful payments go to your configured M-Pesa till or paybill. Moflay does not hold customer funds.
+
+## Why it works this way
+
+Daraja is the access layer for M-Pesa. Production applications also need credential handling, request validation, state tracking, webhooks, retries, reconciliation records, and operational visibility. Moflay centralizes that production layer so your application can use one predictable interface while still settling into your own till or paybill.
+
+## Callbacks vs webhooks
+
+This distinction matters:
+
+- **Safaricom callback**: Sent by Daraja to Moflay so Moflay can finalize the transaction
+- **Moflay webhook**: Sent by Moflay to your app so your system can react to payment or customer events
+
+With Moflay, your backend usually reacts to Moflay webhooks while Moflay processes the Daraja callback internally.
+
+## Related pages
+
+- [Make your first payment](/first-payment)
+- [Set up credentials in the dashboard](/dashboard/credentials)
+- [Webhook overview](/webhooks/overview)

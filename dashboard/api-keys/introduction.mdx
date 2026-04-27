@@ -1,0 +1,59 @@
+---
+title: "Manage API keys"
+description: "Rotate, revoke, and operate Moflay API keys safely across sandbox and production environments."
+---
+
+Use the dashboard API Keys page for ongoing API key operations after your first key is created.
+
+## When to manage keys
+
+Manage API keys when you need to:
+
+- Add a key for another service or deployment target
+- Rotate a key during a normal security cycle
+- Revoke a key after a leak or employee offboarding
+- Review key usage and last-used timestamps
+- Reduce permissions for a service
+
+## Recommended key strategy
+
+- Create separate keys for sandbox and production.
+- Use one key per service, worker, or deployment target.
+- Grant only the permissions each service needs.
+- Store keys in a secret manager or deployment environment variables.
+- Rotate keys instead of reusing one key everywhere.
+
+## Permissions
+
+Current API permissions include:
+
+| Permission | Use |
+| --- | --- |
+| `express.pay` | Create M-Pesa Express payment requests |
+| `customers.read` | Read customer records |
+| `customers.write` | Create, update, or delete customer records |
+| `transactions.read` | Read transactions and payment status |
+
+## Rotate a key
+
+1. Create a new key in the same environment with the same required permissions.
+2. Add the new key to your secret manager or deployment environment.
+3. Deploy the service that uses the new key.
+4. Confirm the new key is being used successfully.
+5. Revoke the old key.
+
+## Respond to a leaked key
+
+If a key may be exposed:
+
+1. Revoke the key immediately.
+2. Create a replacement key with the minimum required permissions.
+3. Redeploy affected services.
+4. Review recent key usage and payment activity.
+5. Rotate any related internal secrets if they were exposed with the key.
+
+## Related pages
+
+- [Set up an API key](/setup-api-key)
+- [Authentication reference](/api-reference/authentication)
+- [Go-live checklist](/go-live/checklist)

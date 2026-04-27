@@ -1,0 +1,85 @@
+---
+title: "Express payment examples"
+description: "Create M-Pesa Express payments with the Moflay SDK using phone numbers, customer IDs, metadata, and error handling."
+---
+
+Use these examples after you have installed the SDK and created an API key with the `express.pay` permission.
+
+## Basic payment
+
+```typescript
+import { Moflay } from "@moflay/sdk";
+
+const moflay = new Moflay({
+  token: process.env.MOFLAY_API_KEY!,
+});
+
+const payment = await moflay.express.pay({
+  phoneNumber: "254712345678",
+  amount: 100,
+  description: "Order 1001",
+  accountReference: "ORDER1001",
+});
+
+console.log(payment.paymentId, payment.transactionId, payment.status);
+```
+
+## Payment with customer details
+
+```typescript
+const payment = await moflay.express.pay({
+  phoneNumber: "254712345678",
+  customerName: "Jane Doe",
+  amount: 2500,
+  description: "Plan",
+  accountReference: "SUB202604",
+  metadata: {
+    orderId: "SUB-2026-04",
+    plan: "premium",
+  },
+});
+```
+
+## Payment for an existing customer
+
+When you send `customerId`, do not include extra customer fields in the same request.
+
+```typescript
+const payment = await moflay.express.pay({
+  customerId: "cus_GqfKXLmg61LURZhB",
+  amount: 500,
+  description: "Invoice",
+  accountReference: "INV1001",
+});
+```
+
+## Handle payment creation errors
+
+```typescript
+try {
+  const payment = await moflay.express.pay({
+    phoneNumber: "254712345678",
+    amount: 100,
+    description: "Order 1001",
+    accountReference: "ORDER1001",
+  });
+
+  console.log(payment.paymentId);
+} catch (error) {
+  console.error("Payment request failed", error);
+}
+```
+
+## Request limits
+
+| Field | Limit |
+| --- | --- |
+| `amount` | Whole number from `1` to `250000` |
+| `description` | Up to `13` characters |
+| `accountReference` | Up to `12` alphanumeric characters |
+
+## Related pages
+
+- [Make your first payment](/first-payment)
+- [Make your first payment with HTTP](/first-payment-http)
+- [Webhook events](/webhooks/events)

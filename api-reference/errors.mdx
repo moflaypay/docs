@@ -1,0 +1,86 @@
+---
+title: Errors
+description: Troubleshoot problems with this comprehensive breakdown of all error codes.
+---
+
+## Error schema
+
+We use standard HTTP response codes for success and failure notifications, and our errors are further classified by type.
+
+### `validation_error`
+
+- **Status:** 400
+- **Message:** We found an error with one or more fields in the request.
+- **Suggested action:** The message will contain more details about what field and error were found.
+
+### `method_not_allowed`
+
+- **Status:** 405
+- **Message:** Method is not allowed for the requested path.
+- **Suggested action:** Change your API endpoint to use a valid method.
+
+### `not_found`
+
+- **Status:** 404
+- **Message:** The requested endpoint does not exist or the requested resource was not found.
+- **Suggested action:** Change your request URL to match a valid API endpoint.
+
+### `rate_limit_exceeded`
+
+- **Status:** 429
+- **Message:** You have exceeded your request limit. Please try again later.
+- **Suggested action:** You should read the [response headers](./rate-limit) and reduce the rate at which you request the API. This can be done by introducing a queue mechanism or reducing the number of concurrent requests per second.
+
+### `missing_api_key`
+
+- **Status:** 401
+- **Message:** Missing API key in the authorization header.
+- **Suggested action:** Include the following header in the request: `Authorization: Bearer MOFLAY_API_KEY`.
+
+### `invalid_api_key`
+
+- **Status:** 403
+- **Message:** API key is invalid.
+- **Suggested action:** Make sure the API key is correct or generate a new [API key in the dashboard](https://app.moflay.com/api-keys).
+
+### `invalid_access`
+
+- **Status:** 422
+- **Message:** The API key does not have the necessary permissions to access this resource.
+- **Suggested action:** Make sure the API key has the necessary permissions to access this resource.You can confirm the permissions in the [API Keys dashboard](https://app.moflay.com/api-keys).
+
+### `subdomain_error`
+
+- **Status:** 403
+- **Message:** This subdomain is not authorized to access this path.
+- **Suggested action:** Use `api.moflay.com` to access the available API Endpoints.
+
+### `duplicate_error`
+
+- **Status:** 409
+- **Message:** A record with this information already exists.
+- **Suggested action:** Check the request data and ensure it is unique.
+
+### `invalid_idempotency_key`
+
+- **Status:** 400
+- **Message:** The key must be between 1-256 chars.
+- **Suggested action:** Use an `Idempotency-Key` value between 1 and 256 characters.
+
+### `idempotency_key_reused`
+
+- **Status:** 422
+- **Message:** This idempotency key was already used with a different request body.
+- **Suggested action:** Use the same idempotency key only when retrying the same request body. Use a new key for a different request.
+
+### `idempotent_request_in_progress`
+
+- **Status:** 409
+- **Message:** A request with this idempotency key is still being processed. Please retry shortly.
+- **Suggested action:** Wait briefly and retry the same request with the same `Idempotency-Key`.
+
+### `internal_server_error`
+
+- **Status:** 500
+- **Message:** An unexpected error occurred.
+- **Suggested action:** Try the request again later. If the error does not resolve, check our [status page](https://status.moflay.com) for service updates.

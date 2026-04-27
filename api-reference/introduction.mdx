@@ -1,0 +1,54 @@
+---
+title: "Introduction"
+description: "Start with the Moflay REST API base URL, authentication model, core resources, payment status flow, and supporting reference pages."
+---
+
+The Moflay API gives your backend direct access to M-Pesa payment, customer, and transaction workflows over HTTPS.
+
+## Base URL
+
+```text
+https://api.moflay.com/v1
+```
+
+## Authentication
+
+Send your API key in the `Authorization` header:
+
+```http
+Authorization: Bearer mof_test_your_api_key
+```
+
+Use a sandbox key for sandbox data and a production key for live data. The API key determines the business, environment, and permissions for the request.
+
+## Core API areas
+
+| Area | Purpose |
+| --- | --- |
+| Express payments | Create M-Pesa Express STK push payment requests with `POST /v1/express` |
+| Payments | Read the current status of a payment attempt with `GET /v1/payments/{paymentId}` |
+| Customers | Create, update, list, and delete customer records |
+| Transactions | List transactions and fetch individual transaction records |
+| Webhooks | Receive signed payment and customer events in your backend |
+
+## Payment status flow
+
+1. Call `POST /v1/express`.
+2. Store the returned `paymentId` and `transactionId`.
+3. Use `GET /v1/payments/{paymentId}` for status checks.
+4. Use [Moflay webhooks](/webhooks/overview) for production-grade asynchronous status updates.
+
+## Supporting behavior
+
+- Cursor-based pagination for list endpoints
+- Environment-specific API keys
+- Permission-based access control
+- Standardized JSON error responses
+- Rate limit headers on public API responses
+
+## Read next
+
+- [Authentication](/api-reference/authentication)
+- [Errors](/api-reference/errors)
+- [Rate limits](/api-reference/rate-limit)
+- [Pagination](/api-reference/pagination)

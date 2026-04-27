@@ -1,0 +1,60 @@
+---
+title: "Verify webhook signatures"
+description: "Verify Svix-style Moflay webhook signatures before trusting event payloads."
+---
+
+Verify every Moflay webhook before using the payload. Signature verification protects your backend from requests that did not come from Moflay's webhook delivery system.
+
+## Required headers
+
+Moflay webhooks use Svix-style signing headers:
+
+| Header | Description |
+| --- | --- |
+| `svix-id` | Unique message identifier |
+| `svix-timestamp` | Signed delivery timestamp |
+| `svix-signature` | Signature value to verify |
+
+## Verify with Node.js
+
+```typescript
+import { Webhook } from "svix";
+
+const secret = process.env.MOFLAY_WEBHOOK_SIGNING_SECRET!;
+
+export async function POST(request: Request) {
+  const body = await request.text();
+
+  const payload = new Webhook(secret).verify(body, {
+    "svix-id": request.headers.get("svix-id") ?? "",
+    "svix-timestamp": request.headers.get("svix-timestamp") ?? "",
+    "svix-signature": request.headers.get("svix-signature") ?? "",
+  });
+
+  console.log(payload);
+
+  return new Response(null, { status: 204 });
+}
+```
+
+## Verification rules
+
+- Read the raw request body before parsing JSON.
+- Verify the signature before updating internal records.
+- Return a non-2xx response when verification fails.
+- Store the signing secret in your backend environment variables.
+
+## After verification
+
+After the signature is valid:
+
+1. Check whether you already processed the webhook message.
+2. Inspect the event `type`.
+3. Update your internal order, invoice, or customer record.
+4. Return a successful response after your handler finishes.
+
+## Related pages
+
+- [Webhook overview](/webhooks/overview)
+- [Webhook events](/webhooks/events)
+- [Retries and idempotency](/webhooks/retries-and-idempotency)

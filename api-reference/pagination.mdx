@@ -1,0 +1,106 @@
+---
+title: "Pagination"
+description: "Paginate Moflay list endpoints with cursor, limit, and hasNextPage response metadata."
+---
+
+Moflay list endpoints use cursor-based pagination. Cursor pagination keeps results consistent when new records are created while you are reading a list.
+
+## Pagination parameters
+
+| Parameter | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `cursor` | string | No | - | Cursor returned from the previous page |
+| `limit` | integer | No | `10` | Number of records to return, from `1` to `10` |
+
+## First page request
+
+```bash
+curl "https://api.moflay.com/v1/customers?limit=5" \
+  -H "Authorization: Bearer $MOFLAY_API_KEY"
+```
+
+## Paginated response
+
+```json
+{
+  "data": [
+    {
+      "id": "cus_GqfKXLmg61LURZhB",
+      "name": "Jane Doe",
+      "phoneNumber": "254712345678",
+      "createdAt": "2024-12-01T10:00:00.000Z"
+    }
+  ],
+  "meta": {
+    "cursor": "eyJpZCI6ImN1c19HcWZLWExtZzYxTFVSWmhCIn0=",
+    "hasNextPage": true,
+    "hasPreviousPage": false
+  }
+}
+```
+
+## Next page request
+
+Use the `meta.cursor` value from the previous response.
+
+```bash
+curl "https://api.moflay.com/v1/customers?cursor=eyJpZCI6ImN1c19HcWZLWExtZzYxTFVSWmhCIn0=&limit=5" \
+  -H "Authorization: Bearer $MOFLAY_API_KEY"
+```
+
+## End of results
+
+When there are no more pages, `hasNextPage` is `false`.
+
+```json
+{
+  "data": [],
+  "meta": {
+    "cursor": null,
+    "hasNextPage": false,
+    "hasPreviousPage": true
+  }
+}
+```
+
+## Iterate through all pages
+
+```javascript
+async function getAllCustomers(apiKey) {
+  const allCustomers = [];
+  let cursor;
+
+  while (true) {
+    const params = new URLSearchParams({ limit: "10" });
+    if (cursor) params.set("cursor", cursor);
+
+    const response = await fetch(
+      `https://api.moflay.com/v1/customers?${params}`,
+      {
+        headers: { Authorization: `Bearer ${apiKey}` },
+      }
+    );
+
+    const page = await response.json();
+    allCustomers.push(...page.data);
+
+    if (!page.meta.hasNextPage) break;
+    cursor = page.meta.cursor;
+  }
+
+  return allCustomers;
+}
+```
+
+## Best practices
+
+- Keep the same filters and sort options while moving through pages.
+- Stop requesting pages when `hasNextPage` is `false`.
+- URL-encode cursor values when building URLs manually.
+- Start from the first page again if a stored cursor no longer works.
+
+## Related pages
+
+- [API introduction](/api-reference/introduction)
+- [Rate limits](/api-reference/rate-limit)
+- [Errors](/api-reference/errors)

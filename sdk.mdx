@@ -1,0 +1,99 @@
+---
+title: "Use the Moflay Node.js SDK"
+description: "Install the Node.js SDK, authenticate with an API key, create M-Pesa Express payments, and read Moflay records."
+---
+
+Use `@moflay/sdk` when you want the fastest path to a working Moflay integration in Node.js or TypeScript.
+
+## Prerequisites
+
+- A [Moflay account](/setup-moflay)
+- A valid [API key](/setup-api-key)
+
+## Install the SDK
+
+<CodeGroup>
+
+```bash npm
+npm install @moflay/sdk
+```
+
+```bash pnpm
+pnpm add @moflay/sdk
+```
+
+```bash bun
+bun add @moflay/sdk
+```
+
+</CodeGroup>
+
+## Authenticate the client
+
+```typescript
+import { Moflay } from "@moflay/sdk";
+
+const moflay = new Moflay({
+  token: process.env.MOFLAY_API_KEY!,
+});
+```
+
+## Send an express payment
+
+```typescript
+const payment = await moflay.express.pay({
+  phoneNumber: "254712345678",
+  amount: 100,
+  description: "Order 1001",
+  accountReference: "ORDER1001",
+});
+
+console.log(payment.paymentId, payment.status);
+```
+
+## Add customer details
+
+```typescript
+const payment = await moflay.express.pay({
+  phoneNumber: "254712345678",
+  customerName: "Jane Doe",
+  amount: 2500,
+  description: "Plan",
+  accountReference: "SUB202604",
+  metadata: {
+    orderId: "SUB-2026-04",
+  },
+});
+```
+
+## Read customers and transactions
+
+```typescript
+const transactions = await moflay.transactions.list({ limit: 10 });
+
+for await (const page of transactions) {
+  console.log(page.data);
+}
+```
+
+```typescript
+const customers = await moflay.customers.list({ limit: 10 });
+
+for await (const page of customers) {
+  console.log(page.data);
+}
+```
+
+## SDK vs raw HTTP
+
+| Use the SDK when | Use raw HTTP when |
+| --- | --- |
+| Your backend uses Node.js or TypeScript | Your backend uses another language |
+| You want typed request and response helpers | You want direct control over HTTP behavior |
+| You prefer SDK pagination helpers | You already have an HTTP client abstraction |
+
+## Related pages
+
+- [Make your first payment](/first-payment)
+- [Make your first payment with HTTP](/first-payment-http)
+- [Express payment examples](/sdk-examples/express-payment)
