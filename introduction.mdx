@@ -49,7 +49,8 @@ Daraja gives access to M-Pesa. Moflay gives developers the production layer arou
 
     **Moflay's solution**: Moflay receives the Safaricom callback, updates the
     payment state, and sends signed webhooks such as `payment.completed` and
-    `payment.failed` to your backend.
+    `payment.failed` to your backend. Read [Daraja callbacks](/daraja/handling-callbacks)
+    for how Moflay builds the callback URL and acknowledges Safaricom.
 
   </Accordion>
 
@@ -58,7 +59,9 @@ Daraja gives access to M-Pesa. Moflay gives developers the production layer arou
     completed, failed, or still waiting for a final result.
 
     **Moflay's solution**: Moflay stores payment and transaction records that
-    are easier to reconcile from the dashboard, API, or webhook events.
+    are easier to reconcile from the dashboard, API, or webhook events. See
+    [Transaction statuses](/api-reference/transaction-statuses) for every
+    status and Daraja `ResultCode` mapping.
 
   </Accordion>
 
@@ -78,11 +81,11 @@ Daraja gives access to M-Pesa. Moflay gives developers the production layer arou
 ### M-Pesa Express payments
 
 <CardGroup cols={3}>
-  <Card title="STK Push API" icon="smartphone" href="/api-reference/introduction">
+  <Card title="STK Push API" icon="smartphone" href="/first-payment-http">
     Create M-Pesa Express payment requests from your backend.
   </Card>
 
-<Card title="Node.js SDK" icon="code" href="/sdk">
+<Card title="Node.js SDK" icon="code" href="/first-payment">
   Use `@moflay/sdk` for a faster TypeScript and Node.js integration.
 </Card>
 
@@ -105,6 +108,10 @@ Daraja gives access to M-Pesa. Moflay gives developers the production layer arou
 >
   Use live Daraja credentials when you are ready to process real payments.
 </Card>
+
+  <Card title="Daraja callbacks" icon="arrow-down-left" href="/daraja/handling-callbacks">
+    How Moflay receives Safaricom STK callbacks and how your app should react.
+  </Card>
 
   <Card title="Managed credentials" icon="key" href="/dashboard/credentials">
     Store Daraja credentials by business and environment.
@@ -193,6 +200,10 @@ Daraja gives access to M-Pesa. Moflay gives developers the production layer arou
 
 ## Quick start
 
+Send your first sandbox payment without Daraja setup. The default sandbox path
+uses Moflay test credentials, so you can create an API key and start with the
+SDK or HTTP API.
+
 <Steps>
   <Step title="Create your account">
     Create a Moflay account and organization from the
@@ -200,7 +211,7 @@ Daraja gives access to M-Pesa. Moflay gives developers the production layer arou
   </Step>
 
   <Step title="Create an API key">
-    Generate a sandbox API key with the permissions your backend needs.
+    Generate a sandbox API key with `express.pay` and `transactions.read`.
 
     Learn more in [Create an API key](/setup-api-key).
 
@@ -209,7 +220,8 @@ Daraja gives access to M-Pesa. Moflay gives developers the production layer arou
   <Step title="Send a sandbox payment">
     Use the SDK or raw HTTP API to send your first M-Pesa Express payment.
 
-    Start with [Make your first payment](/first-payment).
+    Start with [Quickstart with SDK](/first-payment) or
+    [Quickstart with HTTP](/first-payment-http).
 
   </Step>
 
@@ -304,7 +316,7 @@ Daraja gives access to M-Pesa. Moflay gives developers the production layer arou
   </Card>
 
 <Card title="Make your first payment" icon="send" href="/first-payment">
-  Send a sandbox M-Pesa Express payment with the SDK.
+  Send a sandbox M-Pesa Express payment without Daraja setup.
 </Card>
 
 <Card title="Read how Moflay works" icon="book-open" href="/how-moflay-works">
@@ -313,5 +325,9 @@ Daraja gives access to M-Pesa. Moflay gives developers the production layer arou
 
   <Card title="Explore the API" icon="square-terminal" href="/api-reference/introduction">
     Review authentication, endpoints, errors, rate limits, and pagination.
+  </Card>
+
+  <Card title="Transaction statuses" icon="list-checks" href="/api-reference/transaction-statuses">
+    Interpret payment states, webhooks, and Daraja result codes.
   </Card>
 </CardGroup>

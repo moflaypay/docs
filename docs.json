@@ -2,7 +2,7 @@
   "$schema": "https://mintlify.com/docs.json",
   "name": "Moflay",
   "description": "Developer documentation for integrating M-Pesa payments with Moflay. Learn account setup, API keys, sandbox and production credentials, webhooks, SDK usage, and the Moflay API.",
-  "theme": "maple",
+  "theme": "sequoia",
   "favicon": "/favicon.ico",
   "colors": {
     "primary": "#00c062",
@@ -31,11 +31,13 @@
     }
   },
   "navbar": {
+  "primary": {
+    "href": "https://app.moflay.com",
+    "label": "Dashboard",
+    "type": "button"
+  },
     "links": [
-      {
-        "label": "Dashboard",
-        "href": "https://app.moflay.com"
-      },
+ 
       {
         "label": "Contact Support",
         "href": "mailto:support@moflay.com"
@@ -62,12 +64,12 @@
             "icon": "rocket",
             "pages": [
               "introduction",
-              "setup-moflay",
-              "setup-api-key",
               "first-payment",
               "first-payment-http",
-              "sdk",
-              "how-moflay-works"
+              "setup-moflay",
+              "setup-api-key",
+              "how-moflay-works",
+              "sdk"
             ]
           },
           {
@@ -78,6 +80,15 @@
               "dashboard/credentials",
               "dashboard/credentials-security",
               "dashboard/api-keys/introduction"
+            ]
+          },
+          {
+            "group": "Daraja & M-Pesa",
+            "icon": "smartphone",
+            "pages": [
+              "daraja/setup-sandbox-credentials",
+              "daraja/setup-production-credentials",
+              "daraja/handling-callbacks"
             ]
           },
           {
@@ -93,10 +104,7 @@
           {
             "group": "Go Live",
             "icon": "badge-check",
-            "pages": [
-              "daraja/setup-production-credentials",
-              "go-live/checklist"
-            ]
+            "pages": ["go-live/checklist"]
           },
           {
             "group": "Examples",
@@ -119,6 +127,7 @@
             "pages": [
               "api-reference/introduction",
               "api-reference/authentication",
+              "api-reference/transaction-statuses",
               "api-reference/errors",
               "api-reference/rate-limit",
               "api-reference/pagination"

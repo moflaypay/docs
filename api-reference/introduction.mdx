@@ -1,5 +1,5 @@
 ---
-title: "Introduction"
+title: "REST API overview"
 description: "Start with the Moflay REST API base URL, authentication model, core resources, payment status flow, and supporting reference pages."
 ---
 
@@ -26,7 +26,7 @@ Use a sandbox key for sandbox data and a production key for live data. The API k
 | Area | Purpose |
 | --- | --- |
 | Express payments | Create M-Pesa Express STK push payment requests with `POST /v1/express` |
-| Payments | Read the current status of a payment attempt with `GET /v1/payments/{paymentId}` |
+| Payments | Read the current status of a payment attempt with `GET /v1/payments/{id}` |
 | Customers | Create, update, list, and delete customer records |
 | Transactions | List transactions and fetch individual transaction records |
 | Webhooks | Receive signed payment and customer events in your backend |
@@ -35,8 +35,12 @@ Use a sandbox key for sandbox data and a production key for live data. The API k
 
 1. Call `POST /v1/express`.
 2. Store the returned `paymentId` and `transactionId`.
-3. Use `GET /v1/payments/{paymentId}` for status checks.
+3. Use `GET /v1/payments/{id}` for status checks (this reads Moflay’s stored state; see [Transaction statuses](/api-reference/transaction-statuses)).
 4. Use [Moflay webhooks](/webhooks/overview) for production-grade asynchronous status updates.
+
+## Amounts
+
+Send payment amounts as integer minor currency units. For example, `amount: 1000` means `KES 10.00`.
 
 ## Supporting behavior
 
@@ -49,6 +53,8 @@ Use a sandbox key for sandbox data and a production key for live data. The API k
 ## Read next
 
 - [Authentication](/api-reference/authentication)
+- [Transaction statuses](/api-reference/transaction-statuses)
 - [Errors](/api-reference/errors)
+- [Daraja callbacks](/daraja/handling-callbacks)
 - [Rate limits](/api-reference/rate-limit)
 - [Pagination](/api-reference/pagination)

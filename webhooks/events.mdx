@@ -11,6 +11,7 @@ Webhook event types describe what changed in Moflay. Subscribe only to the event
 | --- | --- | --- |
 | `payment.completed` | A payment finishes successfully | Mark an order, invoice, or wallet top-up as paid |
 | `payment.failed` | A payment fails or is rejected | Mark the payment attempt as failed and allow retry |
+| `payment.canceled` | The customer canceled the STK prompt | Release holds or allow a new checkout attempt |
 
 ## Customer events
 
@@ -28,7 +29,7 @@ Use stable Moflay identifiers such as `paymentId`, `transactionId`, and `custome
 
 ## Choose events for your integration
 
-- Payment-only checkout: subscribe to `payment.completed` and `payment.failed`.
+- Payment-only checkout: subscribe to `payment.completed`, `payment.failed`, and `payment.canceled` when you need to distinguish user cancellation from other failures.
 - Customer sync: add `customer.created`, `customer.updated`, and `customer.deleted`.
 - Dashboard-only workflows: you may not need webhooks unless another system must react automatically.
 
@@ -36,4 +37,6 @@ Use stable Moflay identifiers such as `paymentId`, `transactionId`, and `custome
 
 - [Webhook overview](/webhooks/overview)
 - [Verify webhook signatures](/webhooks/signature-verification)
+- [Transaction statuses](/api-reference/transaction-statuses)
+- [Daraja callbacks](/daraja/handling-callbacks)
 - [Make your first payment with HTTP](/first-payment-http)

@@ -1,87 +1,142 @@
 ---
-title: "Make your first payment"
-description: "Send a sandbox M-Pesa Express payment with the Node.js SDK and verify the result in the dashboard."
+title: "Make your first payment with the SDK"
+sidebarTitle: "Quickstart with SDK"
+description: "Send a sandbox M-Pesa Express payment with the Node.js SDK, then check the payment status."
 ---
 
-Use this tutorial to go from a new Moflay account to your first sandbox payment with the Node.js SDK.
+Use this quickstart to create a minimal Node.js project, send a sandbox M-Pesa Express payment, and check the payment status.
 
 ## Prerequisites
 
 - A [Moflay account and organization](/setup-moflay)
-- A sandbox [API key](/setup-api-key) with the `express.pay` permission
-- Node.js, pnpm, npm, or Bun
+- A sandbox [API key](/setup-api-key) with `express.pay` and `transactions.read`
+- Node.js 18 or later
 
-## Step 1: Install the SDK
+## Sandbox test values
 
-```bash
-npm install @moflay/sdk
-```
+For the default sandbox path, you do not need to set up Daraja credentials before your first payment. Moflay uses default sandbox test credentials unless you add your own [sandbox credentials](/daraja/setup-sandbox-credentials).
 
-## Step 2: Store your API key
+Use these values for the first test:
 
-```bash
-export MOFLAY_API_KEY="mof_test_your_api_key"
-```
+| Value | Use |
+| --- | --- |
+| `254712345678` | Default sandbox test phone number |
+| `amount: 1000` | KES 10.00 in minor currency units |
+| `mof_test_...` | Sandbox API key |
 
-## Step 3: Send a sandbox payment
+Sandbox payments do not move real money. The first response commonly returns `pending`; check the final status by polling during development or by using [webhooks](/webhooks/overview) in production.
 
-```typescript
-import { Moflay } from "@moflay/sdk";
+## Send your first payment
 
-const moflay = new Moflay({
-  token: process.env.MOFLAY_API_KEY!,
-});
+<Steps>
+  <Step title="Create a Node.js project">
+    ```bash
+    mkdir moflay-first-payment
+    cd moflay-first-payment
+    npm init -y
+    npm pkg set type=module
+    ```
+  </Step>
 
-async function main() {
-  const payment = await moflay.express.pay({
-    phoneNumber: "254712345678",
-    amount: 100,
-    description: "Order 1001",
-    accountReference: "ORDER1001",
-  });
+  <Step title="Install the SDK">
+    ```bash
+    npm install @moflay/sdk
+    ```
+  </Step>
 
-  console.log(payment.paymentId, payment.status);
-}
+  <Step title="Store your API key">
+    ```bash
+    export MOFLAY_API_KEY="mof_test_your_api_key"
+    ```
+  </Step>
 
-main().catch(console.error);
-```
+  <Step title="Create the payment script">
+    Create `index.mjs`:
 
-The payment starts in `pending` status after Moflay sends the STK push request.
+    ```javascript
+    import { Moflay } from "@moflay/sdk";
 
-## Step 4: Check the result
+    const moflay = new Moflay({
+      token: process.env.MOFLAY_API_KEY,
+    });
 
-The response includes fields such as:
+    async function main() {
+      const payment = await moflay.express.pay({
+        phoneNumber: "254712345678",
+        amount: 1000,
+        description: "Order 1001",
+        accountReference: "ORDER1001",
+      });
 
-- `paymentId`
-- `transactionId`
-- `customerId`
-- `status`
-- `amount`
-- `environment`
+      console.log("Payment created");
+      console.log({
+        paymentId: payment.paymentId,
+        transactionId: payment.transactionId,
+        status: payment.status,
+        amount: payment.amount,
+        environment: payment.environment,
+      });
 
-After the request succeeds:
+      const latest = await moflay.payments.getOne({
+        id: payment.paymentId,
+      });
 
-1. Open the [Moflay dashboard](https://app.moflay.com).
-2. Go to the **Transactions** page.
-3. Confirm that the payment appears in the sandbox environment.
+      console.log("Latest status");
+      console.log({
+        paymentId: latest.id,
+        transactionId: latest.transactionId,
+        status: latest.status,
+        amount: latest.amount,
+        environment: latest.environment,
+      });
+    }
+
+    main().catch((error) => {
+      console.error(error);
+      process.exit(1);
+    });
+    ```
+  </Step>
+
+  <Step title="Run the script">
+    ```bash
+    node index.mjs
+    ```
+  </Step>
+
+  <Step title="Check the dashboard">
+    1. Open the [Moflay dashboard](https://app.moflay.com).
+    2. Go to the **Transactions** page.
+    3. Confirm that the payment appears in the sandbox environment.
+  </Step>
+</Steps>
+
+The payment starts in `pending` after Moflay sends the STK push request. A final status such as `completed`, `failed`, or `canceled` appears after Moflay receives the M-Pesa result.
 
 ## Verify the result
 
 Your setup is working if:
 
-- The SDK call returns a valid payment response.
+- The SDK call returns a `paymentId` and `transactionId`.
+- The payment uses the `sandbox` environment.
 - The transaction appears in the dashboard.
-- The environment is `sandbox`.
+- The status check returns the same payment or transaction.
+
+## Production status handling
+
+Polling payment status is useful during development. In production, configure [Moflay webhooks](/webhooks/overview) so your backend receives signed payment events such as `payment.completed`, `payment.failed`, and `payment.canceled`.
 
 ## Troubleshooting
 
-- **The API returns `missing_api_key`**: Make sure the SDK receives `MOFLAY_API_KEY`.
-- **The API returns `invalid_api_key`**: Check that the key is active and copied correctly.
-- **The API returns `invalid_access`**: Add the `express.pay` permission to the key or create a new key with that permission.
+- **The API returns `missing_api_key`**: Make sure `MOFLAY_API_KEY` is exported in the same terminal where you run `node index.mjs`.
+- **The API returns `invalid_api_key`**: Check that the key is active, copied correctly, and starts with `mof_test_` for sandbox.
+- **Payment creation returns `invalid_access`**: Add the `express.pay` permission to the key or create a new sandbox key with that permission.
+- **Status polling returns `invalid_access`**: Add the `transactions.read` permission to the key or create a new sandbox key with that permission.
 - **The payment does not appear in the dashboard**: Confirm you are viewing the sandbox environment.
 
 ## Next steps
 
 - [Make your first payment with HTTP](/first-payment-http)
+- [Transaction statuses](/api-reference/transaction-statuses)
+- [Webhook overview](/webhooks/overview)
 - [Use the Moflay Node.js SDK](/sdk)
-- [Set up production credentials](/daraja/setup-production-credentials)
