@@ -36,10 +36,15 @@ API keys authenticate your requests to the Moflay API. Create separate keys for 
 
 The current API permission set includes:
 
-- `express.pay`
-- `customers.read`
-- `customers.write`
-- `transactions.read`
+| Permission | Allows |
+| --- | --- |
+| `express.pay` | Create M-Pesa Express payment requests |
+| `customers.read` | Read customer records |
+| `customers.write` | Create, update, or delete customer records |
+| `transactions.read` | Read transactions and payment status |
+
+For the quickstarts, grant `express.pay` to create the payment and
+`transactions.read` to check the payment status.
 
 ## Use the key in your app
 

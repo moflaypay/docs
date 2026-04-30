@@ -16,8 +16,8 @@ Moflay webhooks notify your backend when payment and customer events happen. Use
     and stores the final status.
   </Step>
   <Step title="Moflay sends your webhook">
-    Moflay sends a signed event such as `payment.completed` or
-    `payment.failed` to your configured endpoint.
+    Moflay sends a signed event such as `payment.completed`,
+    `payment.failed`, or `payment.canceled` to your configured endpoint.
   </Step>
   <Step title="Your backend verifies and handles the event">
     Your app verifies the signature, checks idempotency, and updates your
@@ -39,6 +39,7 @@ For most payment integrations, subscribe to:
 
 - `payment.completed`
 - `payment.failed`
+- `payment.canceled` (when you need to detect the customer dismissing the STK prompt)
 
 Customer events are useful when your backend needs to mirror Moflay customer records.
 
@@ -49,10 +50,12 @@ Customer events are useful when your backend needs to mirror Moflay customer rec
 | Safaricom callback | Safaricom Daraja | Moflay |
 | Moflay webhook | Moflay | Your backend |
 
-Daraja callbacks finalize the M-Pesa result inside Moflay. Your backend consumes Moflay webhooks so it can react to clean, signed payment and customer events.
+Daraja callbacks finalize the M-Pesa result inside Moflay. Your backend consumes Moflay webhooks so it can react to clean, signed payment and customer events. See [Daraja callbacks](/daraja/handling-callbacks) for details on the Safaricom-to-Moflay step.
 
 ## Related pages
 
+- [Daraja callbacks](/daraja/handling-callbacks)
+- [Transaction statuses](/api-reference/transaction-statuses)
 - [Verify webhook signatures](/webhooks/signature-verification)
 - [Webhook events](/webhooks/events)
 - [Retries and idempotency](/webhooks/retries-and-idempotency)

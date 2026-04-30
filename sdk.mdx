@@ -43,7 +43,7 @@ const moflay = new Moflay({
 ```typescript
 const payment = await moflay.express.pay({
   phoneNumber: "254712345678",
-  amount: 100,
+  amount: 1000,
   description: "Order 1001",
   accountReference: "ORDER1001",
 });
@@ -57,7 +57,7 @@ console.log(payment.paymentId, payment.status);
 const payment = await moflay.express.pay({
   phoneNumber: "254712345678",
   customerName: "Jane Doe",
-  amount: 2500,
+  amount: 250000,
   description: "Plan",
   accountReference: "SUB202604",
   metadata: {
@@ -84,6 +84,10 @@ for await (const page of customers) {
 }
 ```
 
+## Amounts
+
+Send payment amounts as integer minor currency units. For example, `amount: 1000` means `KES 10.00`.
+
 ## SDK vs raw HTTP
 
 | Use the SDK when | Use raw HTTP when |
@@ -97,3 +101,4 @@ for await (const page of customers) {
 - [Make your first payment](/first-payment)
 - [Make your first payment with HTTP](/first-payment-http)
 - [Express payment examples](/sdk-examples/express-payment)
+- [Transaction statuses](/api-reference/transaction-statuses)

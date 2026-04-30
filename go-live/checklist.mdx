@@ -39,7 +39,7 @@ Set up a production webhook endpoint before launch so your backend receives fina
 
 1. Open [Webhooks](https://app.moflay.com/webhooks).
 2. Add your production endpoint URL.
-3. Subscribe to `payment.completed` and `payment.failed`.
+3. Subscribe to `payment.completed`, `payment.failed`, and `payment.canceled` if your product should react when the user dismisses the STK prompt.
 4. Store the webhook signing secret in your backend environment variables.
 5. Verify signatures before processing webhook payloads.
 
@@ -77,5 +77,7 @@ If live payments fail during launch:
 ## Related pages
 
 - [Set up production credentials](/daraja/setup-production-credentials)
+- [Daraja callbacks](/daraja/handling-callbacks)
+- [Transaction statuses](/api-reference/transaction-statuses)
 - [Verify webhook signatures](/webhooks/signature-verification)
 - [Credential security](/dashboard/credentials-security)

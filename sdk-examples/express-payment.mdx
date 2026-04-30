@@ -3,7 +3,7 @@ title: "Express payment examples"
 description: "Create M-Pesa Express payments with the Moflay SDK using phone numbers, customer IDs, metadata, and error handling."
 ---
 
-Use these examples after you have installed the SDK and created an API key with the `express.pay` permission.
+Use these examples after you have installed the SDK and created an API key with the `express.pay` permission. Add `transactions.read` when your app also reads payment or transaction status.
 
 ## Basic payment
 
@@ -16,7 +16,7 @@ const moflay = new Moflay({
 
 const payment = await moflay.express.pay({
   phoneNumber: "254712345678",
-  amount: 100,
+  amount: 1000,
   description: "Order 1001",
   accountReference: "ORDER1001",
 });
@@ -30,7 +30,7 @@ console.log(payment.paymentId, payment.transactionId, payment.status);
 const payment = await moflay.express.pay({
   phoneNumber: "254712345678",
   customerName: "Jane Doe",
-  amount: 2500,
+  amount: 250000,
   description: "Plan",
   accountReference: "SUB202604",
   metadata: {
@@ -47,7 +47,7 @@ When you send `customerId`, do not include extra customer fields in the same req
 ```typescript
 const payment = await moflay.express.pay({
   customerId: "cus_GqfKXLmg61LURZhB",
-  amount: 500,
+  amount: 5000,
   description: "Invoice",
   accountReference: "INV1001",
 });
@@ -59,7 +59,7 @@ const payment = await moflay.express.pay({
 try {
   const payment = await moflay.express.pay({
     phoneNumber: "254712345678",
-    amount: 100,
+    amount: 1000,
     description: "Order 1001",
     accountReference: "ORDER1001",
   });
@@ -74,12 +74,15 @@ try {
 
 | Field | Limit |
 | --- | --- |
-| `amount` | Whole number from `1` to `250000` |
+| `amount` | Integer in minor currency units from `1` to `250000` |
 | `description` | Up to `13` characters |
 | `accountReference` | Up to `12` alphanumeric characters |
+
+For example, `amount: 1000` means `KES 10.00`.
 
 ## Related pages
 
 - [Make your first payment](/first-payment)
 - [Make your first payment with HTTP](/first-payment-http)
+- [Transaction statuses](/api-reference/transaction-statuses)
 - [Webhook events](/webhooks/events)

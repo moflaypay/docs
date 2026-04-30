@@ -1,5 +1,6 @@
 ---
 title: "Make your first payment with HTTP"
+sidebarTitle: "Quickstart with HTTP"
 description: "Send a sandbox M-Pesa Express payment with the REST API, then check the payment status by payment ID."
 ---
 
@@ -8,74 +9,96 @@ Use the REST API when your backend is not running Node.js or when you want direc
 ## Prerequisites
 
 - A [Moflay account and organization](/setup-moflay)
-- A sandbox [API key](/setup-api-key) with the `express.pay` permission
-- A phone number you can use for a sandbox STK push test
+- A sandbox [API key](/setup-api-key) with `express.pay` and `transactions.read`
+- `curl` or another HTTP client
 
-## Step 1: Store your API key
+## Sandbox test values
 
-```bash
-export MOFLAY_API_KEY="mof_test_your_api_key"
-```
+For the default sandbox path, you do not need to set up Daraja credentials before your first payment. Moflay uses default sandbox test credentials unless you add your own [sandbox credentials](/daraja/setup-sandbox-credentials).
 
-## Step 2: Start an express payment
+Use these values for the first test:
 
-Call `POST /v1/express` with either `phoneNumber` or `customerId`. For the first test, use `phoneNumber`.
+| Value | Use |
+| --- | --- |
+| `254712345678` | Default sandbox test phone number |
+| `amount: 1000` | KES 10.00 in minor currency units |
+| `mof_test_...` | Sandbox API key |
 
-```bash
-curl https://api.moflay.com/v1/express \
-  -X POST \
-  -H "Authorization: Bearer $MOFLAY_API_KEY" \
-  -H "Content-Type: application/json" \
-  -H "Idempotency-Key: order-1001" \
-  -d '{
-    "phoneNumber": "254712345678",
-    "amount": 100,
-    "description": "Order 1001",
-    "accountReference": "ORDER1001"
-  }'
-```
+Sandbox payments do not move real money. The first response commonly returns `pending`; check the final status by polling during development or by using [webhooks](/webhooks/overview) in production.
 
-The API returns `202 Accepted` after Moflay sends the payment request to M-Pesa.
+## Send your first payment
 
-```json
-{
-  "paymentId": "pay_ABC123DEF456GHI",
-  "transactionId": "trxn_ABC123DEF456GHI",
-  "customerId": "cus_GqfKXLmg61LURZhB",
-  "phoneNumber": "254712345678",
-  "amount": 100,
-  "currency": "KES",
-  "status": "pending",
-  "description": "Order 1001",
-  "accountReference": "ORDER1001",
-  "environment": "sandbox",
-  "timestamp": "2024-12-19T10:25:00.000Z",
-  "message": "Payment request sent to customer"
-}
-```
+<Steps>
+  <Step title="Store your API key">
+    ```bash
+    export MOFLAY_API_KEY="mof_test_your_api_key"
+    ```
+  </Step>
 
-## Step 3: Check the payment status
+  <Step title="Start an express payment">
+    Call `POST /v1/express` with either `phoneNumber` or `customerId`. For the
+    first test, use `phoneNumber`.
 
-Use the `paymentId` returned by `POST /v1/express` to read the latest payment status. You can also use the related `transactionId` if that is the identifier you stored.
+    ```bash
+    curl https://api.moflay.com/v1/express \
+      -X POST \
+      -H "Authorization: Bearer $MOFLAY_API_KEY" \
+      -H "Content-Type: application/json" \
+      -H "Idempotency-Key: order-1001" \
+      -d '{
+        "phoneNumber": "254712345678",
+        "amount": 1000,
+        "description": "Order 1001",
+        "accountReference": "ORDER1001"
+      }'
+    ```
 
-```bash
-curl https://api.moflay.com/v1/payments/pay_ABC123DEF456GHI \
-  -H "Authorization: Bearer $MOFLAY_API_KEY"
-```
+    The API returns `202 Accepted` after Moflay sends the payment request to
+    M-Pesa.
 
-```bash
-curl https://api.moflay.com/v1/payments/trxn_ABC123DEF456GHI \
-  -H "Authorization: Bearer $MOFLAY_API_KEY"
-```
+    ```json
+    {
+      "paymentId": "pay_ABC123DEF456GHI",
+      "transactionId": "trxn_ABC123DEF456GHI",
+      "customerId": "cus_GqfKXLmg61LURZhB",
+      "phoneNumber": "254712345678",
+      "amount": 1000,
+      "currency": "KES",
+      "status": "pending",
+      "description": "Order 1001",
+      "accountReference": "ORDER1001",
+      "environment": "sandbox",
+      "timestamp": "2024-12-19T10:25:00.000Z",
+      "message": "Payment request sent to customer"
+    }
+    ```
+  </Step>
 
-The status can move from `pending` to a final state such as `completed` or `failed`.
+  <Step title="Check the payment status">
+    Use the `paymentId` returned by `POST /v1/express` to read the latest
+    payment status. You can also use the related `transactionId` if that is the
+    identifier you stored.
+
+    ```bash
+    curl https://api.moflay.com/v1/payments/pay_ABC123DEF456GHI \
+      -H "Authorization: Bearer $MOFLAY_API_KEY"
+    ```
+
+    ```bash
+    curl https://api.moflay.com/v1/payments/trxn_ABC123DEF456GHI \
+      -H "Authorization: Bearer $MOFLAY_API_KEY"
+    ```
+  </Step>
+</Steps>
+
+The status can move from `pending` to a final state such as `completed`, `failed`, or `canceled`. See [Transaction statuses](/api-reference/transaction-statuses) for the full status reference.
 
 ## Request rules
 
 | Field | Requirement |
 | --- | --- |
 | `phoneNumber` or `customerId` | One is required |
-| `amount` | Whole number, greater than `0`, up to `250000` |
+| `amount` | Integer in minor currency units, greater than `0`, up to `250000` |
 | `description` | Required, up to `13` characters |
 | `accountReference` | Optional, up to `12` alphanumeric characters |
 | `Idempotency-Key` | Optional, recommended for payment creation retries |
@@ -87,7 +110,7 @@ The status can move from `pending` to a final state such as `completed` or `fail
 
 ## Production status handling
 
-Polling `GET /v1/payments/{paymentId}` is useful during development. In production, configure [Moflay webhooks](/webhooks/overview) so your backend receives signed payment events such as `payment.completed` and `payment.failed`.
+Polling `GET /v1/payments/{id}` is useful during development. In production, configure [Moflay webhooks](/webhooks/overview) so your backend receives signed payment events such as `payment.completed`, `payment.failed`, and `payment.canceled`.
 
 ## Verify the result
 
@@ -95,10 +118,17 @@ Your HTTP integration is working when:
 
 - `POST /v1/express` returns `202`
 - The response includes a `paymentId`
-- `GET /v1/payments/{paymentId}` returns the same payment in the sandbox environment
+- `GET /v1/payments/{id}` returns the same payment in the sandbox environment
+
+## Troubleshooting
+
+- **Payment creation returns `invalid_access`**: Add the `express.pay` permission to the key or create a new sandbox key with that permission.
+- **Status polling returns `invalid_access`**: Add the `transactions.read` permission to the key or create a new sandbox key with that permission.
+- **The payment does not appear in the dashboard**: Confirm you are viewing the sandbox environment.
 
 ## Related pages
 
 - [Make your first payment with the SDK](/first-payment)
+- [Transaction statuses](/api-reference/transaction-statuses)
 - [Authentication](/api-reference/authentication)
 - [Webhook overview](/webhooks/overview)

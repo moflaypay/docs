@@ -24,8 +24,9 @@ Daraja provides access to M-Pesa. Moflay provides the developer infrastructure a
     updates the transaction state.
   </Step>
   <Step title="Your systems receive the final status">
-    You can read the transaction in the dashboard or API, and you can subscribe
-    to signed Moflay webhooks such as `payment.completed` and `payment.failed`.
+    You can read the transaction in the dashboard or API (`GET /v1/payments/{id}`),
+    and you can subscribe to signed Moflay webhooks such as `payment.completed`,
+    `payment.failed`, and `payment.canceled`.
   </Step>
 </Steps>
 
@@ -66,4 +67,6 @@ With Moflay, your backend usually reacts to Moflay webhooks while Moflay process
 
 - [Make your first payment](/first-payment)
 - [Set up credentials in the dashboard](/dashboard/credentials)
+- [Daraja callbacks](/daraja/handling-callbacks)
+- [Transaction statuses](/api-reference/transaction-statuses)
 - [Webhook overview](/webhooks/overview)
