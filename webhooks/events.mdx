@@ -13,6 +13,12 @@ Webhook event types describe what changed in Moflay. Subscribe only to the event
 | `payment.failed` | A payment fails or is rejected | Mark the payment attempt as failed and allow retry |
 | `payment.canceled` | The customer canceled the STK prompt | Release holds or allow a new checkout attempt |
 
+<CardGroup cols={2}>
+  <Card title="Payment statuses & outcomes" icon="list-checks" href="/payments/transaction-statuses">
+    Map each payment status to webhook events, terminal outcomes, and Daraja result codes.
+  </Card>
+</CardGroup>
+
 ## Customer events
 
 | Event | When it is sent | Common action |
@@ -37,6 +43,6 @@ Use stable Moflay identifiers such as `paymentId`, `transactionId`, and `custome
 
 - [Webhook overview](/webhooks/overview)
 - [Verify webhook signatures](/webhooks/signature-verification)
-- [Transaction statuses](/api-reference/transaction-statuses)
+- [Payment statuses & outcomes](/payments/transaction-statuses)
 - [Daraja callbacks](/daraja/handling-callbacks)
 - [Make your first payment with HTTP](/first-payment-http)

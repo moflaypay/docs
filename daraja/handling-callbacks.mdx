@@ -5,6 +5,12 @@ description: "Understand how Moflay handles Safaricom Daraja callbacks for you a
 
 Moflay handles Safaricom Daraja callbacks for you. You do not need to expose a Daraja callback endpoint, configure callback routing, or process raw Safaricom callback payloads in your backend.
 
+<CardGroup cols={2}>
+  <Card title="Payment statuses & outcomes" icon="list-checks" href="/payments/transaction-statuses">
+    Moflay transaction statuses, Daraja `ResultCode` mappings, webhooks, and polling `GET /v1/payments/{id}`.
+  </Card>
+</CardGroup>
+
 ## How callback handling works
 
 When you create an M-Pesa Express payment through Moflay:
@@ -15,7 +21,7 @@ When you create an M-Pesa Express payment through Moflay:
 4. Moflay updates the payment and transaction status.
 5. Your application reads the result from Moflay.
 
-The callback relationship is between Safaricom and Moflay. Your integration stays focused on creating payments and responding to [Moflay transaction statuses](/api-reference/transaction-statuses).
+The callback relationship is between Safaricom and Moflay. Your integration stays focused on creating payments and responding to [Moflay transaction statuses](/payments/transaction-statuses).
 
 ## What your application does
 
@@ -48,7 +54,7 @@ When you use Moflay, you do not need to:
   </Accordion>
 
   <Accordion title="What happens when the customer cancels or the request expires?">
-    Moflay returns a transaction status your application can handle. See [Transaction statuses](/api-reference/transaction-statuses) for each status value and recommended action.
+    Moflay returns a transaction status your application can handle. See [Payment statuses & outcomes](/payments/transaction-statuses) for each status value and recommended action.
   </Accordion>
 </AccordionGroup>
 
@@ -56,4 +62,4 @@ When you use Moflay, you do not need to:
 
 - [Set up production credentials](/daraja/setup-production-credentials)
 - [Set up sandbox credentials](/daraja/setup-sandbox-credentials)
-- [Transaction statuses](/api-reference/transaction-statuses)
+- [Payment statuses & outcomes](/payments/transaction-statuses)

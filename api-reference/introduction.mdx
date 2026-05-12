@@ -1,5 +1,5 @@
 ---
-title: "REST API overview"
+title: "Introduction"
 description: "Start with the Moflay REST API base URL, authentication model, core resources, payment status flow, and supporting reference pages."
 ---
 
@@ -35,7 +35,7 @@ Use a sandbox key for sandbox data and a production key for live data. The API k
 
 1. Call `POST /v1/express`.
 2. Store the returned `paymentId` and `transactionId`.
-3. Use `GET /v1/payments/{id}` for status checks (this reads Moflay’s stored state; see [Transaction statuses](/api-reference/transaction-statuses)).
+3. Use `GET /v1/payments/{id}` for status checks (this reads Moflay’s stored state; see [Payment statuses & outcomes](/payments/transaction-statuses)).
 4. Use [Moflay webhooks](/webhooks/overview) for production-grade asynchronous status updates.
 
 ## Amounts
@@ -53,7 +53,7 @@ Send payment amounts as integer minor currency units. For example, `amount: 1000
 ## Read next
 
 - [Authentication](/api-reference/authentication)
-- [Transaction statuses](/api-reference/transaction-statuses)
+- [Payment statuses & outcomes](/payments/transaction-statuses) (**Developer Docs → Payments**): Moflay statuses, Daraja codes, and webhooks
 - [Errors](/api-reference/errors)
 - [Daraja callbacks](/daraja/handling-callbacks)
 - [Rate limits](/api-reference/rate-limit)

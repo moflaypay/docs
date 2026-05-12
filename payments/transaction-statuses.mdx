@@ -1,0 +1,77 @@
+---
+title: "Payment statuses & outcomes"
+sidebarTitle: "Transaction statuses"
+description: "Reference for Moflay transaction and payment statuses, Daraja ResultCode mappings, webhooks, and polling the Payments API."
+---
+
+Use this page to interpret values returned by the Moflay API and dashboard. Status reflects **Moflay’s stored state**, which is updated from Safaricom’s STK callback and, when needed, Daraja STK Push Query reconciliation—not from a live Safaricom lookup on every read.
+
+<Tabs>
+  <Tab title="Moflay statuses">
+    ## Moflay transaction status
+
+    Each Express payment has a **transaction** status drawn from this set:
+
+    | Status | Meaning | Typical next step |
+    | --- | --- | --- |
+    | `initiating` | Moflay is creating the payment attempt and sending the STK request to Daraja. | Wait; poll `GET /v1/payments/{id}` or use webhooks when the status advances. |
+    | `pending` | STK was accepted; waiting for the customer or for a final callback/reconciliation result. | Wait for webhook or poll; customer may still complete or cancel on the phone. |
+    | `completed` | Payment succeeded; Moflay recorded success. | Fulfill the order; handle `payment.completed` if subscribed. |
+    | `failed` | Payment did not complete (M-Pesa rejection, timeout, limits, etc.). | Allow retry; handle `payment.failed` if subscribed. |
+    | `canceled` | The customer canceled the STK prompt (for example Daraja result **1032**). | Handle `payment.canceled` if subscribed; optionally offer a new attempt. |
+    | `unknown` | Moflay could not determine a definitive outcome after reconciliation (for example missing or non-final Daraja signal). | Manual review; **no** standard `payment.*` webhook is sent for this status. |
+  </Tab>
+
+  <Tab title="Daraja ResultCodes">
+    ## Daraja `ResultCode` reference
+
+    When Moflay resolves an STK callback or query response, it maps Safaricom **ResultCode** values to the settlement outcome and user-facing detail. Known mappings include:
+
+    | ResultCode | Maps to | Message (summary) |
+    | --- | --- | --- |
+    | `0` | Success → `completed` | Payment completed successfully |
+    | `1` | `failed` | The customer did not have enough available M-Pesa funds to complete the payment. |
+    | `2` | `failed` | The requested amount is below M-Pesa's minimum transaction amount. |
+    | `3` | `failed` | The requested amount exceeds M-Pesa's allowed transaction amount. |
+    | `4` | `failed` | The customer or shortcode exceeded an M-Pesa transaction limit. |
+    | `17` | `failed` | M-Pesa rejected a duplicate or repeated request for the same amount. |
+    | `1019` | `failed` | The STK prompt expired before the customer completed authorization. |
+    | `1025` | `failed` | M-Pesa rejected the request because one or more transaction fields were too long. |
+    | `1032` | `canceled` | The customer cancelled the STK prompt. |
+    | `1037` | `failed` | M-Pesa could not reach the customer's phone or the customer did not respond to the STK prompt. |
+    | `2001` | `failed` | The customer entered an incorrect M-Pesa PIN. |
+    | `2028` | `failed` | M-Pesa rejected the request because the transaction configuration is invalid. |
+    | `4999` | Still processing (pending path) | The transaction is still under processing. |
+    | `SFC_IC0003` | `failed` | M-Pesa rejected the request because the shortcode, passkey, or initiator configuration is invalid. |
+
+    Other or missing codes may still produce `failed`, `canceled`, or `unknown` depending on payload and reconciliation. Safaricom may also return a **ResultDescription** alongside the code; Moflay may surface that in status detail.
+  </Tab>
+
+  <Tab title="Webhooks & polling">
+    ## Webhooks
+
+    When a payment reaches a **terminal** webhook-eligible status, Moflay enqueues delivery to your endpoint:
+
+    | Transaction status | Webhook event |
+    | --- | --- |
+    | `completed` | `payment.completed` |
+    | `failed` | `payment.failed` |
+    | `canceled` | `payment.canceled` |
+    | `unknown` | *(none — subscribe to polling or dashboard)* |
+
+    `initiating` and `pending` do not emit these completion webhooks.
+
+    See [Webhook events](/webhooks/events) and [Daraja callbacks](/daraja/handling-callbacks).
+
+    ## Polling the Payments API
+
+    [`GET /v1/payments/{id}`](https://api.moflay.com/openapi) returns the current payment (and related transaction fields) from Moflay’s database. It does **not** query Safaricom on each request. For latency-sensitive UIs, combine short polling with webhooks.
+  </Tab>
+</Tabs>
+
+## Related pages
+
+- [Daraja callbacks](/daraja/handling-callbacks)
+- [Webhook events](/webhooks/events)
+- [How Moflay works](/how-moflay-works)
+- [API authentication](/api-reference/authentication)

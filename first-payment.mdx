@@ -26,6 +26,12 @@ Use these values for the first test:
 
 Sandbox payments do not move real money. The first response commonly returns `pending`; check the final status by polling during development or by using [webhooks](/webhooks/overview) in production.
 
+<CardGroup cols={2}>
+  <Card title="Payment statuses & outcomes" icon="list-checks" href="/payments/transaction-statuses">
+    Full reference for `pending`, `completed`, `failed`, `canceled`, and related webhook events.
+  </Card>
+</CardGroup>
+
 ## Send your first payment
 
 <Steps>
@@ -137,6 +143,6 @@ Polling payment status is useful during development. In production, configure [M
 ## Next steps
 
 - [Make your first payment with HTTP](/first-payment-http)
-- [Transaction statuses](/api-reference/transaction-statuses)
+- [Payment statuses & outcomes](/payments/transaction-statuses)
 - [Webhook overview](/webhooks/overview)
 - [Use the Moflay Node.js SDK](/sdk)

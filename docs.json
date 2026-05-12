@@ -2,7 +2,7 @@
   "$schema": "https://mintlify.com/docs.json",
   "name": "Moflay Documentation",
   "description": "Developer documentation for integrating M-Pesa payments with Moflay. Learn account setup, API keys, sandbox and production credentials, webhooks, SDK usage, and the Moflay API.",
-  "theme": "maple",
+  "theme": "aspen",
   "favicon": "/favicon.ico",
   "colors": {
     "primary": "#00c062",
@@ -21,6 +21,12 @@
       "redirect": true
     }
   },
+  "redirects": [
+    {
+      "source": "/api-reference/transaction-statuses",
+      "destination": "/payments/transaction-statuses"
+    }
+  ],
   "logo": {
     "light": "/logo/moflay-black-logo.svg",
     "dark": "/logo/moflay-white-logo.svg"
@@ -51,8 +57,8 @@
   "navigation": {
     "tabs": [
       {
-        "tab": "Documentation",
-        "icon": "book",
+        "tab": "Developer Docs",
+        "icon": "",
         "groups": [
           {
             "group": "Get Started",
@@ -66,6 +72,11 @@
               "how-moflay-works",
               "sdk"
             ]
+          },
+          {
+            "group": "Payments",
+            "icon": "banknote",
+            "pages": ["payments/transaction-statuses"]
           },
           {
             "group": "Dashboard",
@@ -122,7 +133,6 @@
             "pages": [
               "api-reference/introduction",
               "api-reference/authentication",
-              "api-reference/transaction-statuses",
               "api-reference/errors",
               "api-reference/rate-limit",
               "api-reference/pagination"

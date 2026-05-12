@@ -1,0 +1,4 @@
+interface:
+  display_name: "Write Mintlify Docs"
+  short_description: "Write clearer Mintlify documentation"
+  default_prompt: "Use $write-mintlify-docs to draft or improve a Mintlify documentation page."
