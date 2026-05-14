@@ -3,11 +3,12 @@ title: "Introduction"
 sidebarTitle: "Introduction"
 ---
 
+Moflay is the fastest way to add M-Pesa STK Push to your app.
 
-
-Moflay is a developer infrastructure layer for M-Pesa payments.
-
-Daraja gives access to M-Pesa. Moflay gives developers the production layer around that access: a clean API, SDK, signed webhooks, transaction records, logs, dashboard visibility, and managed credentials for your own till or paybill.
+Daraja gives access to M-Pesa. Moflay gives developers the production tooling
+around that access: a clean API, SDK, signed webhooks, transaction records,
+logs, dashboard visibility, and managed credentials for your own till or
+paybill.
 
 <CardGroup cols={2}>
   <Card title="Built around Daraja" icon="plug">
@@ -20,6 +21,20 @@ Daraja gives access to M-Pesa. Moflay gives developers the production layer arou
     reconciliation records, environments, and dashboard tools.
   </Card>
 </CardGroup>
+
+## What is M-Pesa STK Push?
+
+M-Pesa STK Push is a payment method where a user receives a prompt on their
+phone to enter their M-Pesa PIN and approve a payment.
+
+It is commonly called **STK Push** because the request is pushed to the user's
+SIM Toolkit (STK) on their phone. STK stands for **SIM Toolkit**, the menu
+system used by mobile networks to deliver secure prompts on supported SIM cards
+and phones.
+
+For apps and websites, STK Push makes checkout simpler: your backend sends the
+payment request, the customer approves it on their phone, and your app receives
+the result through Moflay.
 
 ## Problems Moflay solves
 
@@ -102,9 +117,13 @@ Daraja gives access to M-Pesa. Moflay gives developers the production layer arou
   Use live Daraja credentials when you are ready to process real payments.
 </Card>
 
-  <Card title="Daraja callbacks" icon="arrow-down-left" href="/daraja/handling-callbacks">
-    How Moflay receives Safaricom STK callbacks and how your app should react.
-  </Card>
+<Card
+  title="Daraja callbacks"
+  icon="arrow-down-left"
+  href="/daraja/handling-callbacks"
+>
+  How Moflay receives Safaricom STK callbacks and how your app should react.
+</Card>
 
   <Card title="Managed credentials" icon="key" href="/dashboard/credentials">
     Store Daraja credentials by business and environment.
@@ -316,9 +335,13 @@ SDK or HTTP API.
   Understand how Moflay fits between your app, Daraja, and M-Pesa.
 </Card>
 
-  <Card title="Explore the API" icon="square-terminal" href="/api-reference/introduction">
-    Review authentication, endpoints, errors, rate limits, and pagination.
-  </Card>
+<Card
+  title="Explore the API"
+  icon="square-terminal"
+  href="/api-reference/introduction"
+>
+  Review authentication, endpoints, errors, rate limits, and pagination.
+</Card>
 
   <Card title="Payment statuses & outcomes" icon="list-checks" href="/payments/transaction-statuses">
     Interpret payment states, webhooks, and Daraja result codes.
