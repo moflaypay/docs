@@ -9,9 +9,6 @@
     "light": "#07C983",
     "dark": "#15803D"
   },
-  "icons": {
-    "library": "lucide"
-  },
   "contextual": {
     "display": "toc",
     "options": ["copy", "mcp", "chatgpt", "claude", "cursor", "vscode"]
@@ -21,24 +18,17 @@
       "redirect": true
     }
   },
-  "redirects": [
-    {
-      "source": "/api-reference/transaction-statuses",
-      "destination": "/payments/transaction-statuses"
-    }
-  ],
   "logo": {
     "light": "/logo/moflay-black-logo.svg",
     "dark": "/logo/moflay-white-logo.svg"
   },
   "navbar": {
-  "primary": {
-    "href": "https://app.moflay.com",
-    "label": "Dashboard",
-    "type": "button"
-  },
+    "primary": {
+      "href": "https://app.moflay.com",
+      "label": "Dashboard",
+      "type": "button"
+    },
     "links": [
- 
       {
         "label": "Contact Support",
         "href": "mailto:support@moflay.com"
