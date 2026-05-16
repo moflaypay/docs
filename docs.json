@@ -16,13 +16,6 @@
     "display": "toc",
     "options": ["copy", "mcp", "chatgpt", "claude", "cursor", "vscode"]
   },
-  "fonts": {
-    "heading": {
-      "family": "Manrope",
-      "weight": 400,
-      "format": "woff2"
-    }
-  },
   "errors": {
     "404": {
       "redirect": true
@@ -64,7 +57,7 @@
     "tabs": [
       {
         "tab": "Developer Docs",
-        "icon": "Books",
+        "icon": "books",
         "groups": [
           {
             "group": "Get Started",
