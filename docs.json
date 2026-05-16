@@ -16,6 +16,13 @@
     "display": "toc",
     "options": ["copy", "mcp", "chatgpt", "claude", "cursor", "vscode"]
   },
+  "fonts": {
+    "heading": {
+      "family": "Manrope",
+      "weight": 400,
+      "format": "woff2"
+    }
+  },
   "errors": {
     "404": {
       "redirect": true
@@ -48,9 +55,8 @@
   "footer": {
     "socials": {
       "x": "https://x.com/moflaypay",
-      "github": "https://github.com/moflay",
+      "github": "https://github.com/moflaypay",
       "linkedin": "https://www.linkedin.com/company/moflaypay",
-      "youtube": "https://www.youtube.com/@moflaypay",
       "website": "https://moflay.com"
     }
   },
@@ -58,7 +64,7 @@
     "tabs": [
       {
         "tab": "Developer Docs",
-        "icon": "",
+        "icon": "Books",
         "groups": [
           {
             "group": "Get Started",
