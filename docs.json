@@ -50,8 +50,7 @@
         "icon": "books",
         "groups": [
           {
-            "group": "Get Started",
-            "icon": "rocket",
+            "group": "GET STARTED",
             "pages": [
               "introduction",
               "first-payment",
@@ -63,13 +62,11 @@
             ]
           },
           {
-            "group": "Payments",
-            "icon": "banknote",
+            "group": "PAYMENTS",
             "pages": ["payments/transaction-statuses"]
           },
           {
-            "group": "Dashboard",
-            "icon": "layout-dashboard",
+            "group": "DASHBOARD",
             "pages": [
               "dashboard/environments",
               "dashboard/credentials",
@@ -78,8 +75,7 @@
             ]
           },
           {
-            "group": "Daraja & M-Pesa",
-            "icon": "smartphone",
+            "group": "DARAJA & M-PESA",
             "pages": [
               "daraja/setup-sandbox-credentials",
               "daraja/setup-production-credentials",
@@ -87,8 +83,7 @@
             ]
           },
           {
-            "group": "Webhooks",
-            "icon": "webhook",
+            "group": "WEBHOOKS",
             "pages": [
               "webhooks/overview",
               "webhooks/signature-verification",
@@ -97,13 +92,11 @@
             ]
           },
           {
-            "group": "Go Live",
-            "icon": "badge-check",
+            "group": "GO LIVE",
             "pages": ["go-live/checklist"]
           },
           {
-            "group": "Examples",
-            "icon": "flask-conical",
+            "group": "EXAMPLES",
             "pages": [
               "sdk-examples/express-payment",
               "sdk-examples/customer-management",
@@ -117,8 +110,7 @@
         "icon": "code",
         "groups": [
           {
-            "group": "Core Concepts",
-            "icon": "book-open-text",
+            "group": "CORE CONCEPTS",
             "pages": [
               "api-reference/introduction",
               "api-reference/authentication",
@@ -128,8 +120,7 @@
             ]
           },
           {
-            "group": "APIs",
-            "icon": "square-terminal",
+            "group": "APIS",
             "expanded": true,
             "openapi": {
               "source": "https://api.moflay.com/openapi",
