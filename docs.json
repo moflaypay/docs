@@ -130,10 +130,5 @@
         ]
       }
     ]
-  },
-  "integrations": {
-    "posthog": {
-      "apiKey": "phc_q2pAyKQQLJUeon8nzz5yaykkUuHVb2ULp2cfCskiwXfB"
-    }
   }
 }
